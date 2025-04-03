@@ -23,6 +23,7 @@ gem "jbuilder"
 gem "activeadmin"
 gem "devise"
 gem "cancancan"
+gem "sass-rails"
 
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
