@@ -3,6 +3,7 @@ require 'json'
 require 'nokogiri'
 require 'pexels'
 require 'faker'
+require_relative '../lib/scraper'
 
 # Clean up the database
 Product.destroy_all
@@ -28,6 +29,7 @@ puts "Database cleaned!"
 
 
 
+
 # Fetch products from the external API
 url = 'http://makeup-api.herokuapp.com/api/v1/products.json'
 response = URI.open(url).read
@@ -45,29 +47,6 @@ def fetch_cached_images(search_term, client, limit = 10)
     puts "Pexels API error: #{e.message}. Using placeholder images."
     Array.new(limit, 'https://via.placeholder.com/300?text=No+Image+Available')
   end
-end
-
-# Scraper logic to fetch skincare products from Sephora
-def scrape_sephora_skincare
-  url = "https://www.sephora.com/ca/en/shop/skincare"
-  doc = Nokogiri::HTML(URI.open(url))
-
-  scraped_products = []
-  doc.css('.css-12egk0t').each do |product_card| # Update the CSS selector if Sephora changes its structure
-    name = product_card.css('.css-0').text.strip
-    description = product_card.css('.css-1vwy1pm').text.strip # Adjust CSS selector for description
-    price = product_card.css('.css-0 span').text.strip.gsub('$', '').to_f
-    image_url = product_card.css('img').attr('src').value
-
-    scraped_products << {
-      name: name,
-      description: description.presence || 'No description available.',
-      price: price,
-      image_url: image_url
-    }
-  end
-
-  scraped_products
 end
 
 # Limit categories to 5 from the external API
@@ -117,26 +96,51 @@ end
 puts "Creating skincare category..."
 skincare_category = Category.create!(name: "Skincare")
 
-# Populate skincare category with Sephora scraper
-scraped_skincare_products = scrape_sephora_skincare
-scraped_skincare_products.first(100).each do |product|
-  Product.create!(
-    name: product[:name],
-    description: product[:description],
-    price: product[:price],
-    stock_quantity: rand(10..100),
-    image_url: product[:image_url],
-    category: skincare_category
-  )
+# Populate skincare category with Proactiv scraper
+puts "Scraping skincare products from Proactiv..."
+scraped_skincare_products = ProactivScraper.scrape_skincare
+
+if scraped_skincare_products.any?
+  scraped_skincare_products.each do |product|
+    Product.create!(
+      name: product[:name],
+      description: product[:description],
+      price: product[:price],
+      stock_quantity: rand(10..100), # Generate a random stock quantity
+      image_url: product[:image_url],
+      category: skincare_category
+    )
+  end
+  puts "Successfully added #{scraped_skincare_products.size} products to the Skincare category."
+else
+  puts "No products were scraped from Proactiv."
 end
 
-# If there are fewer than 100 skincare products, fill the rest with Faker
+# If there are fewer than 100 skincare products, fill the rest with predefined skincare names
 if Product.where(category: skincare_category).count < 100
-  image_urls = fetch_cached_images("skincare", pexels_client, 10) # Fetch 10 images
+  image_urls = fetch_cached_images("skincare", pexels_client, 20)
+
+  skincare_names = [
+    "Hydrating Facial Cleanser",
+    "Vitamin C Serum",
+    "Retinol Night Cream",
+    "Hyaluronic Acid Moisturizer",
+    "Exfoliating Face Scrub",
+    "SPF 50 Sunscreen",
+    "Anti-Aging Eye Cream",
+    "Charcoal Detox Mask",
+    "Aloe Vera Gel",
+    "Collagen Boosting Serum",
+    "Tea Tree Oil Cleanser",
+    "Brightening Toner",
+    "Soothing Face Mist",
+    "Deep Pore Cleansing Mask",
+    "Oil-Free Moisturizer"
+  ]
 
   (100 - Product.where(category: skincare_category).count).times do
     Product.create!(
-      name: Faker::Commerce.product_name,
+      name: skincare_names.sample, # Randomly select a skincare name
       description: Faker::Lorem.paragraph(sentence_count: 3),
       price: Faker::Commerce.price(range: 10..100.0),
       stock_quantity: rand(10..100),
@@ -145,4 +149,5 @@ if Product.where(category: skincare_category).count < 100
     )
   end
 end
+
 puts "Skincare category populated!"
