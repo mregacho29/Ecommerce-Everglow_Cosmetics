@@ -1,2 +1,9 @@
-<h1>Products#show</h1>
-<p>Find me in app/views/products/show.html.erb</p>
+<h1><%= @product.name %></h1>
+
+<%= image_tag @product.image_url, alt: @product.name, size: "300x300" if @product.image_url.present? %><br>
+<p><strong>Description:</strong> <%= @product.description %></p>
+<p><strong>Price:</strong> $<%= @product.price %></p>
+<p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
+<p><strong>Category:</strong> <%= @product.category.name if @product.category.present? %></p>
+
+<%= link_to "Back to Products", products_path %>
