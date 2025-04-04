@@ -459,6 +459,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
+  nokogiri
   pexels
   propshaft
   puma (>= 5.0)
