@@ -1,14 +1,21 @@
 <h1>Products</h1>
 
-<ul>
-  <% @products.each do |product| %>
-    <li>
-      <%= link_to product.name, product_path(product) %><br>
-      <%= image_tag product.image_url, alt: product.name, size: "150x150" if product.image_url.present? %><br>
-      <strong>Price:</strong> $<%= product.price %><br>
-      <strong>Stock:</strong> <%= product.stock_quantity %><br>
-      <strong>Category:</strong> <%= product.category.name if product.category.present? %>
-    </li>
-    <hr>
-  <% end %>
-</ul>
+<% @products.each do |product| %>
+  <div class="product">
+    <h2><%= product.name %></h2>
+    <% if product.image_url.present? %>
+      <div class="product-image">
+        <%= image_tag product.image_url, style: "width: 150px; height: auto;" %>
+      </div>
+    <% elsif product.image.attached? %>
+      <div class="product-image">
+        <%= image_tag url_for(product.image), style: "width: 150px; height: auto;" %>
+      </div>
+    <% else %>
+      <p>No image available</p>
+    <% end %>
+    <p>Price: <%= number_to_currency(product.price) %></p>
+    <p>Stock: <%= product.stock_quantity %></p>
+    <%= link_to 'View Details', product_path(product) %>
+  </div>
+<% end %>

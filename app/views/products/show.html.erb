@@ -1,9 +1,19 @@
 <h1><%= @product.name %></h1>
 
-<%= image_tag @product.image_url, alt: @product.name, size: "300x300" if @product.image_url.present? %><br>
-<p><strong>Description:</strong> <%= @product.description %></p>
-<p><strong>Price:</strong> $<%= @product.price %></p>
-<p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
-<p><strong>Category:</strong> <%= @product.category.name if @product.category.present? %></p>
+<% if @product.image_url.present? %>
+  <div class="product-image">
+    <%= image_tag @product.image_url, style: "width: 300px; height: auto;" %>
+  </div>
+<% elsif @product.image.attached? %>
+  <div class="product-image">
+    <%= image_tag url_for(@product.image), style: "width: 300px; height: auto;" %>
+  </div>
+<% else %>
+  <p>No image available</p>
+<% end %>
 
-<%= link_to "Back to Products", products_path %>
+<p><strong>Description:</strong> <%= @product.description %></p>
+<p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
+<p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
+
+<%= link_to 'Back to Products', products_path %>

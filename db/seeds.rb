@@ -1,14 +1,13 @@
 require 'open-uri'
 require 'json'
+require 'nokogiri'
 require 'pexels'
 require 'faker'
 
 # Clean up the database
 Product.destroy_all
 Category.destroy_all
-# AdminUser.destroy_all
 puts "Database cleaned!"
-
 
 
 
@@ -34,7 +33,6 @@ url = 'http://makeup-api.herokuapp.com/api/v1/products.json'
 response = URI.open(url).read
 products = JSON.parse(response)
 
-
 # Initialize the Pexels client
 pexels_client = Pexels::Client.new(ENV['PEXELS_API_KEY'])
 
@@ -49,23 +47,43 @@ def fetch_cached_images(search_term, client, limit = 10)
   end
 end
 
+# Scraper logic to fetch skincare products from Sephora
+def scrape_sephora_skincare
+  url = "https://www.sephora.com/ca/en/shop/skincare"
+  doc = Nokogiri::HTML(URI.open(url))
 
+  scraped_products = []
+  doc.css('.css-12egk0t').each do |product_card| # Update the CSS selector if Sephora changes its structure
+    name = product_card.css('.css-0').text.strip
+    description = product_card.css('.css-1vwy1pm').text.strip # Adjust CSS selector for description
+    price = product_card.css('.css-0 span').text.strip.gsub('$', '').to_f
+    image_url = product_card.css('img').attr('src').value
 
-# Populate categories dynamically from the API
-puts "Creating categories..."
-categories = products.map { |product| product['category'] }.uniq.compact
-categories.each do |category_name|
+    scraped_products << {
+      name: name,
+      description: description.presence || 'No description available.',
+      price: price,
+      image_url: image_url
+    }
+  end
+
+  scraped_products
+end
+
+# Limit categories to 5 from the external API
+puts "Creating makeup categories..."
+allowed_makeup_categories = products.map { |product| product['category'] }.uniq.compact.first(5)
+allowed_makeup_categories.each do |category_name|
   Category.create!(name: category_name)
 end
-puts "#{categories.size} categories created!"
+puts "#{allowed_makeup_categories.size} makeup categories created!"
 
-# Ensure each category has 100 products
-puts "Creating products for each category..."
-categories.each do |category_name|
+# Populate makeup categories
+allowed_makeup_categories.each do |category_name|
   category_products = products.select { |product| product['category'] == category_name }
   category = Category.find_by(name: category_name)
 
-  # Add products for the category
+  # Add products from the API
   category_products.first(100).each do |product|
     Product.create!(
       name: product['name'],
@@ -77,60 +95,54 @@ categories.each do |category_name|
     )
   end
 
-# If there are fewer than 100 products in the API for this category, fill the rest with Faker
-# Fill the remaining products for the category
-if category_products.size < 100
-  # Define custom product names for makeup and skincare categories
-  makeup_products = [
-    "Matte Lipstick",
-    "Waterproof Mascara",
-    "Blush Palette",
-    "Eyeliner Pen",
-    "Liquid Foundation",
-    "Lip Gloss",
-    "Eyeshadow Palette",
-    "Highlighter Stick",
-    "Brow Gel",
-    "Setting Spray"
-  ]
+  # If there are fewer than 100 products, fill the rest with Faker
+  if Product.where(category: category).count < 100
+    search_term = category_name.downcase.include?("makeup") ? "makeup" : "skincare"
+    image_urls = fetch_cached_images(search_term, pexels_client, 10) # Fetch 10 images
 
-  skincare_products = [
-    "Hydrating Face Cream",
-    "Vitamin C Serum",
-    "Exfoliating Scrub",
-    "Brightening Eye Cream",
-    "Charcoal Face Mask",
-    "Anti-Aging Night Cream",
-    "Facial Toner",
-    "Moisturizing Primer",
-    "SPF 50 Sunscreen",
-    "Makeup Remover"
-  ]
-
-  # Determine the appropriate product list based on the category
-  product_list = if category_name.downcase.include?("makeup")
-                   makeup_products
-  elsif category_name.downcase.include?("skincare")
-                   skincare_products
-  else
-                   makeup_products + skincare_products # Default to a mix of both
+    (100 - Product.where(category: category).count).times do
+      Product.create!(
+        name: Faker::Commerce.product_name,
+        description: Faker::Lorem.paragraph(sentence_count: 3),
+        price: Faker::Commerce.price(range: 10..100.0),
+        stock_quantity: rand(10..100),
+        image_url: image_urls.sample, # Randomly select a cached image
+        category: category
+      )
+    end
   end
+end
 
-  # Fetch images for the category
-  search_term = category_name.downcase.include?("makeup") ? "makeup" : "skincare"
-  image_urls = fetch_cached_images(search_term, pexels_client, 10) # Fetch 10 images
+# Create a separate "Skincare" category
+puts "Creating skincare category..."
+skincare_category = Category.create!(name: "Skincare")
 
-  # Fill the remaining products for the category
-  (100 - category_products.size).times do
+# Populate skincare category with Sephora scraper
+scraped_skincare_products = scrape_sephora_skincare
+scraped_skincare_products.first(100).each do |product|
+  Product.create!(
+    name: product[:name],
+    description: product[:description],
+    price: product[:price],
+    stock_quantity: rand(10..100),
+    image_url: product[:image_url],
+    category: skincare_category
+  )
+end
+
+# If there are fewer than 100 skincare products, fill the rest with Faker
+if Product.where(category: skincare_category).count < 100
+  image_urls = fetch_cached_images("skincare", pexels_client, 10) # Fetch 10 images
+
+  (100 - Product.where(category: skincare_category).count).times do
     Product.create!(
-      name: product_list.sample, # Randomly select a product name from the appropriate list
+      name: Faker::Commerce.product_name,
       description: Faker::Lorem.paragraph(sentence_count: 3),
       price: Faker::Commerce.price(range: 10..100.0),
       stock_quantity: rand(10..100),
       image_url: image_urls.sample, # Randomly select a cached image
-      category: category
+      category: skincare_category
     )
   end
 end
-end
-puts "Products created for each category!"
+puts "Skincare category populated!"
