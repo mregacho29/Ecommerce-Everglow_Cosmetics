@@ -151,3 +151,21 @@ if Product.where(category: skincare_category).count < 100
 end
 
 puts "Skincare category populated!"
+
+
+
+
+
+
+
+# # Add default "Contact" and "About" pages in your seeds.rb file:
+# # Create default pages
+# Page.find_or_create_by!(slug: "contact") do |page|
+#   page.title = "Contact"
+#   page.content = "This is the contact page. Update this content from ActiveAdmin."
+# end
+
+# Page.find_or_create_by!(slug: "about") do |page|
+#   page.title = "About"
+#   page.content = "This is the about page. Update this content from ActiveAdmin."
+# end
