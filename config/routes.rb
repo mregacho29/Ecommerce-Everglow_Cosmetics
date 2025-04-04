@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   get "pages/show"
+  get "/:slug", to: "pages#show", as: :page, constraints: { slug: /(contact|about)/ }
+
   resources :products, only: [ :index, :show ]
 
   devise_for :admin_users, ActiveAdmin::Devise.config
