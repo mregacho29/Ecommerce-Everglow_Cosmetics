@@ -1,2 +1,38 @@
-<h1>Carts#show</h1>
-<p>Find me in app/views/carts/show.html.erb</p>
+<div class="container my-4">
+  <h1 class="mb-4">Your Shopping Cart</h1>
+
+  <% if @cart.present? %>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @cart.each do |product_id, quantity| %>
+            <% product = Product.find(product_id) %>
+            <tr>
+              <td><%= product.name %></td>
+              <td><%= quantity %></td>
+              <td>
+                <%= button_to "Remove", remove_from_cart_path(product_id: product_id), method: :delete, class: "btn btn-danger btn-sm" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-4">
+      <%= link_to "Continue Shopping", products_path, class: "btn btn-secondary" %>
+      <%= link_to "Checkout", checkout_path, class: "btn btn-primary" %>
+    </div>
+  <% else %>
+    <div class="alert alert-warning" role="alert">
+      Your cart is empty.
+    </div>
+    <%= link_to "Start Shopping", products_path, class: "btn btn-primary" %>
+  <% end %>
+</div>

@@ -10,7 +10,11 @@ Rails.application.routes.draw do
     get "about", to: "pages#show", defaults: { slug: "about" }, as: :about
     get "stores", to: "pages#stores", as: :stores
     get "services", to: "pages#services", as: :services
+
     get "cart", to: "carts#show", as: :cart
+    post "cart/add", to: "carts#add", as: :add_to_cart
+    delete "cart/remove", to: "carts#remove", as: :remove_from_cart
+
     get "search", to: "products#search", as: :search
     get "favourites", to: "favourites#index", as: :favourites
 
