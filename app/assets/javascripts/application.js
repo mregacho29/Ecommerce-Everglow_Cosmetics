@@ -1,3 +1,5 @@
+//= require rails-ujs
+
 document.addEventListener('DOMContentLoaded', () => {
   const searchToggle = document.getElementById('searchToggle');
   const searchBarRow = document.getElementById('searchBarRow');
