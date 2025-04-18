@@ -114,16 +114,26 @@
 
 <!-- Hidden Search Bar in the Next Row -->
 <div class="container mt-4 d-none search-bar-container" id="searchBarRow">
-  <form class="d-flex justify-content-center align-items-center" action="<%= search_path %>" method="get">
-    <button class="btn btn-outline-danger mr-3" id="searchClose">
+  <form class="d-flex justify-content-center align-items-center row g-3" action="<%= search_products_path %>" method="get">
+    <button class="btn btn-outline-danger col-auto" id="searchClose">
       <i class="bi bi-x"></i>
     </button>
-    <input class="form-control me-3 w-50" type="search" name="query" placeholder="Search products..." aria-label="Search">
-    <button class="btn btn-outline-dark me-3 mr-2 ml-2" type="submit">Search</button>
-
+    <div class="col-md-6">
+      <input class="form-control" type="search" name="query" placeholder="Search products..." aria-label="Search">
+    </div>
+    <div class="col-md-4">
+      <select name="category" class="form-control">
+        <option value="">All Categories</option>
+        <% Category.pluck(:name).each do |category| %>
+          <option value="<%= category.downcase %>"><%= category %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-outline-dark w-100" type="submit">Search</button>
+    </div>
   </form>
 </div>
-
 
 <!-- Include the Country and Language Modal -->
 <%= render 'shared/modals/country_modal' %>

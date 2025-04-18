@@ -8,14 +8,18 @@ Rails.application.routes.draw do
     # Static pages
     get "contact", to: "pages#show", defaults: { slug: "contact" }, as: :contact
     get "about", to: "pages#show", defaults: { slug: "about" }, as: :about
-    get 'stores', to: 'pages#stores', as: :stores
-    get 'services', to: 'pages#services', as: :services
-    get 'cart', to: 'carts#show', as: :cart
-    get 'search', to: 'products#search', as: :search
-    get 'favourites', to: 'favourites#index', as: :favourites
+    get "stores", to: "pages#stores", as: :stores
+    get "services", to: "pages#services", as: :services
+    get "cart", to: "carts#show", as: :cart
+    get "search", to: "products#search", as: :search
+    get "favourites", to: "favourites#index", as: :favourites
 
     # Products routes
-    resources :products, only: [:index, :show]
+    resources :products, only: [ :index, :show ] do
+      collection do
+        get :search
+      end
+    end
 
     devise_for :users
 

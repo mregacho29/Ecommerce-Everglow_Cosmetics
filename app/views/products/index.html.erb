@@ -1,4 +1,9 @@
-<h1 class="text-center my-4">Products</h1>
+<h1 class="d-flex justify-content-start my-4">Chosen For You</h1>
+
+<div class="mb-3">
+  <%= link_to "Show All Products", products_path, class: "btn btn-secondary" %>
+  <%= link_to "On Sale (Below $50)", products_path(filter: "on_sale"), class: "btn btn-primary" %>
+</div>
 
 <div class="container">
   <div class="row">
@@ -22,4 +27,9 @@
       </div>
     <% end %>
   </div>
+</div>
+
+<!-- Pagination Links -->
+<div class="d-flex justify-content-start">
+  <%= paginate @products, theme: 'bootstrap-4' %>
 </div>

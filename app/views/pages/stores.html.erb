@@ -1,0 +1,38 @@
+<div class="container my-4">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h1 class="card-title"><%= @store[:name] %></h1>
+          <p class="card-text"><%= @store[:city] %>, <%= @store[:state] %>, <%= @store[:country] %></p>
+          <% if @store[:website].present? %>
+            <p class="card-text"><%= link_to @store[:website], @store[:website], target: "_blank", rel: "noopener" %></p>
+          <% else %>
+            <p class="card-text">No website available</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title">Location</h2>
+          <div id="map" style="width: 100%; height: 400px;"></div>
+          <script>
+            mapboxgl.accessToken = '<%= ENV["MAPBOX_ACCESS_TOKEN"] %>';
+            var map = new mapboxgl.Map({
+              container: 'map',
+              style: 'mapbox://styles/mapbox/streets-v11',
+              center: [<%= @store[:longitude] %>, <%= @store[:latitude] %>],
+              zoom: 12
+            });
+
+            new mapboxgl.Marker()
+              .setLngLat([<%= @store[:longitude] %>, <%= @store[:latitude] %>])
+              .addTo(map);
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
