@@ -35,15 +35,14 @@
       <%= link_to favourites_path, class: 'btn btn-outline-dark me-2' do %>
         <i class="bi bi-heart"></i>
       <% end %>
-
       <!-- Sign In/Sign Up Dropdown -->
       <div class="btn-group">
-        <button type="button" class="btn btn-outline-primary dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-person"></i>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-          <li><%= link_to 'Sign In', new_user_session_path, class: 'dropdown-item' %></li>
-          <li><%= link_to 'Register', new_user_registration_path, class: 'dropdown-item' %></li>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">Sign In</a></li>
+          <li><a class="dropdown-item" href="#">Register</a></li>
         </ul>
       </div>
     </div>
