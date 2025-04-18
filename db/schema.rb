@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_04_072413) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_18_090218) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -121,6 +121,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_04_072413) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
+  create_table "pages", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_pages_on_slug", unique: true
+  end
+
   create_table "payments", force: :cascade do |t|
     t.integer "order_id", null: false
     t.string "payment_method"
@@ -161,6 +170,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_04_072413) do
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "encrypted_password", default: "", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
