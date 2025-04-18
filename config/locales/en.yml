@@ -28,4 +28,7 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  hello: "Hello"
+  select_country: "Select Country"
+  select_language: "Select Language"
+  save_preferences: "Save Preferences"

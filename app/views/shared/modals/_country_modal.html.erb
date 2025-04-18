@@ -1,0 +1,41 @@
+<div class="modal fade" id="countryModal" tabindex="-1" aria-labelledby="countryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="countryModalLabel"><%= t('shipping_language_preferences') %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form method="get" action="/">
+          <!-- Country Selection -->
+          <div class="mb-4">
+            <label for="countrySelect" class="form-label fw-bold"><%= t('select_country') %></label>
+            <select class="form-select" id="countrySelect">
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <!-- Add more countries as needed -->
+            </select>
+          </div>
+
+          <!-- Language Selection -->
+          <div class="mb-4">
+            <label for="languageSelect" class="form-label fw-bold"><%= t('select_language') %></label>
+            <select class="form-select" id="languageSelect" name="locale">
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <!-- Add more languages as needed -->
+            </select>
+          </div>
+
+          <!-- Save Button -->
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary"><%= t('save_preferences') %></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

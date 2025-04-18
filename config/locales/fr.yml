@@ -1,0 +1,13 @@
+fr:
+  hello: "Bonjour"
+  select_country: "Sélectionnez un pays"
+  select_language: "Sélectionnez une langue"
+  save_preferences: "Enregistrer les préférences"
+  categories:
+    pencil: "Crayon"
+    lipsticks: "Rouges à lèvres"
+    liquid: "Liquide"
+    makeup: "Maquillage"
+    powder: "Poudre"
+    skincare: "Soins de la peau"
+    all_products: "Tous les produits"
