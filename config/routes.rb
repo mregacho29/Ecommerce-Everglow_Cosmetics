@@ -1,24 +1,21 @@
 Rails.application.routes.draw do
-  get "pages/show"
-  get "/:slug", to: "pages#show", as: :page, constraints: { slug: /(contact|about)/ }
+  # Static pages
+  get "contact", to: "pages#show", defaults: { slug: "contact" }, as: :contact
+  get "about", to: "pages#show", defaults: { slug: "about" }, as: :about
+  get 'stores', to: 'pages#stores', as: :stores
+  get 'services', to: 'pages#services', as: :services
+  get 'cart', to: 'carts#show', as: :cart
 
-  resources :products, only: [ :index, :show ]
+  # Products routes
+  resources :products, only: [:index, :show]
 
+  # Devise and ActiveAdmin routes
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Root route
   root "products#index"
 end

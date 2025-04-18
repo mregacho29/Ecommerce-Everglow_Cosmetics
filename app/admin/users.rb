@@ -1,18 +1,14 @@
 ActiveAdmin.register User do
+  permit_params :email, :password, :password_confirmation, :first_name, :role
 
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
-  # permit_params :first_name, :email, :password_digest, :role
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:first_name, :email, :password_digest, :role]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
-  
+  form do |f|
+    f.inputs "User Details" do
+      f.input :email
+      f.input :password, label: "Password" # Virtual attribute for Devise
+      f.input :password_confirmation, label: "Password Confirmation" # Virtual attribute for Devise
+      f.input :first_name, label: "First Name"
+      f.input :role, as: :select, collection: User.roles.keys if User.respond_to?(:roles)
+    end
+    f.actions
+  end
 end

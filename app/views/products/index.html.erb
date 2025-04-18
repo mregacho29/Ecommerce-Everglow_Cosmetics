@@ -1,21 +1,25 @@
-<h1>Products</h1>
+<h1 class="text-center my-4">Products</h1>
 
-<% @products.each do |product| %>
-  <div class="product">
-    <h2><%= product.name %></h2>
-    <% if product.image_url.present? %>
-      <div class="product-image">
-        <%= image_tag product.image_url, style: "width: 150px; height: auto;" %>
+<div class="container">
+  <div class="row">
+    <% @products.each do |product| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <% if product.image_url.present? %>
+            <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 200px; object-fit: cover;">
+          <% elsif product.image.attached? %>
+            <%= image_tag url_for(product.image), class: "card-img-top", alt: product.name, style: "height: 200px; object-fit: cover;" %>
+          <% else %>
+            <img src="https://via.placeholder.com/200" class="card-img-top" alt="No image available" style="height: 200px; object-fit: cover;">
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= product.name %></h5>
+            <p class="card-text">Price: <%= number_to_currency(product.price) %></p>
+            <p class="card-text">Stock: <%= product.stock_quantity %></p>
+            <%= link_to 'View Details', product_path(product), class: "btn btn-primary" %>
+          </div>
+        </div>
       </div>
-    <% elsif product.image.attached? %>
-      <div class="product-image">
-        <%= image_tag url_for(product.image), style: "width: 150px; height: auto;" %>
-      </div>
-    <% else %>
-      <p>No image available</p>
     <% end %>
-    <p>Price: <%= number_to_currency(product.price) %></p>
-    <p>Stock: <%= product.stock_quantity %></p>
-    <%= link_to 'View Details', product_path(product) %>
   </div>
-<% end %>
+</div>

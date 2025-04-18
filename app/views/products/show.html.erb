@@ -1,19 +1,24 @@
-<h1><%= @product.name %></h1>
-
-<% if @product.image_url.present? %>
-  <div class="product-image">
-    <%= image_tag @product.image_url, style: "width: 300px; height: auto;" %>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-6">
+      <% if @product.image_url.present? %>
+        <div class="product-image">
+          <%= image_tag @product.image_url, class: "img-fluid rounded", alt: @product.name %>
+        </div>
+      <% elsif @product.image.attached? %>
+        <div class="product-image">
+          <%= image_tag url_for(@product.image), class: "img-fluid rounded", alt: @product.name %>
+        </div>
+      <% else %>
+        <p class="text-muted">No image available</p>
+      <% end %>
+    </div>
+    <div class="col-md-6">
+      <h1 class="mb-4"><%= @product.name %></h1>
+      <p><strong>Description:</strong> <%= @product.description %></p>
+      <p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
+      <p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
+      <%= link_to 'Back to Products', products_path, class: "btn btn-secondary mt-3" %>
+    </div>
   </div>
-<% elsif @product.image.attached? %>
-  <div class="product-image">
-    <%= image_tag url_for(@product.image), style: "width: 300px; height: auto;" %>
-  </div>
-<% else %>
-  <p>No image available</p>
-<% end %>
-
-<p><strong>Description:</strong> <%= @product.description %></p>
-<p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
-<p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
-
-<%= link_to 'Back to Products', products_path %>
+</div>
