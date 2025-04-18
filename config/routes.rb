@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "favourites/index"
   get "carts/show"
   # Static pages
   get "contact", to: "pages#show", defaults: { slug: "contact" }, as: :contact
@@ -6,9 +7,13 @@ Rails.application.routes.draw do
   get 'stores', to: 'pages#stores', as: :stores
   get 'services', to: 'pages#services', as: :services
   get 'cart', to: 'carts#show', as: :cart
+  get 'search', to: 'products#search', as: :search
+  get 'favourites', to: 'favourites#index', as: :favourites
 
   # Products routes
   resources :products, only: [:index, :show]
+
+  devise_for :users
 
   # Devise and ActiveAdmin routes
   devise_for :admin_users, ActiveAdmin::Devise.config

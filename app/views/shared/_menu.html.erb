@@ -1,25 +1,22 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <!-- Brand Logo and Name -->
-    <%= link_to root_path, class: 'navbar-brand d-flex align-items-center' do %>
-      <img src="/path/to/logo.png" alt="Everglow Cosmetics" class="me-2" style="height: 40px;">
-      <span>Everglow Cosmetics</span>
-    <% end %>
-
-    <!-- Navbar Toggler for Mobile -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Navbar Content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Left Side: Search Bar -->
-      <form class="d-flex me-auto" action="<%= search_path %>" method="get">
+    <!-- Left Side: Search Bar -->
+    <div class="col-4 d-flex">
+      <form class="d-flex mx-auto" action="<%= search_path %>" method="get">
         <input class="form-control me-2" type="search" name="query" placeholder="Search products..." aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">Search</button>
+        <button class="btn btn-outline-dark" type="submit">Search</button>
       </form>
+    </div>
 
-      <!-- Right Side: Links and Icons -->
+    <!-- Center: Brand Logo and Name -->
+    <div class="col-4 d-flex justify-content-center align-items-center">
+      <%= link_to root_path, class: 'navbar-brand d-flex align-items-center' do %>
+        <img src="/assets/logo.png" alt="Everglow Cosmetics" class="me-2" style="height: 40px;">
+      <% end %>
+    </div>
+
+    <!-- Right Side: Links and Icons -->
+    <div class="col-4 d-flex justify-content-end">
       <ul class="navbar-nav mb-2 mb-lg-0">
         <!-- Dropdown for Stores and Services -->
         <li class="nav-item dropdown">
@@ -32,15 +29,28 @@
           </ul>
         </li>
 
-        <!-- Sign In Link -->
-        <li class="nav-item">
-          <%= link_to 'Sign In', new_user_session_path, class: 'nav-link' %>
+        <!-- Sign In/Sign Up Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="userDropdown">
+            <li><%= link_to 'Sign In', new_user_session_path, class: 'dropdown-item' %></li>
+            <li><%= link_to 'Register', new_user_registration_path, class: 'dropdown-item' %></li>
+          </ul>
         </li>
 
         <!-- Cart Icon -->
         <li class="nav-item">
           <%= link_to cart_path, class: 'nav-link' do %>
             <i class="bi bi-cart"></i> Cart
+          <% end %>
+        </li>
+
+        <!-- Favourite/Love Icon -->
+        <li class="nav-item">
+          <%= link_to favourites_path, class: 'nav-link' do %>
+            <i class="bi bi-heart"></i> Favourites
           <% end %>
         </li>
       </ul>
