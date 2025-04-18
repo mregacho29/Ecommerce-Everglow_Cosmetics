@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "carts/show"
   # Static pages
   get "contact", to: "pages#show", defaults: { slug: "contact" }, as: :contact
   get "about", to: "pages#show", defaults: { slug: "about" }, as: :about
