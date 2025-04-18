@@ -1,0 +1,27 @@
+<div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signInModalLabel">Sign In</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with scope: :user, url: new_user_session_path, local: true do |f| %>
+          <div class="form-floating mb-3">
+            <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
+            <label for="user_email">Email</label>
+          </div>
+          <div class="form-floating mb-3">
+            <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
+            <label for="user_password">Password</label>
+          </div>
+          <div class="form-check text-start my-3">
+            <%= f.check_box :remember_me, class: 'form-check-input' %>
+            <label class="form-check-label" for="user_remember_me">Remember me</label>
+          </div>
+          <%= f.submit 'Sign In', class: 'btn btn-primary w-100' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

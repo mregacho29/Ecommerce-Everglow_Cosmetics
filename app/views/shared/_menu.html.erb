@@ -35,19 +35,43 @@
       <%= link_to favourites_path, class: 'btn btn-outline-dark me-2' do %>
         <i class="bi bi-heart"></i>
       <% end %>
+
       <!-- Sign In/Sign Up Dropdown -->
-      <div class="btn-group">
-        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-person"></i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="#">Sign In</a></li>
-          <li><a class="dropdown-item" href="#">Register</a></li>
-        </ul>
-      </div>
+      <% if user_signed_in? %>
+        <div class="btn-group">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person"></i> <%= current_user.email %>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'dropdown-item' %></li>
+          </ul>
+        </div>
+      <% else %>
+        <div class="btn-group">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signInModal">Sign In</button>
+            </li>
+            <li>
+              <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+            </li>
+          </ul>
+        </div>
+      <% end %>
     </div>
   </header>
 </div>
+
+
+
+<!-- Include the Sign In Modal -->
+<%= render 'shared/modals/sign_in_modal' %>
+
+<!-- Include the Register Modal -->
+<%= render 'shared/modals/register_modal' %>
 
 <!-- New Navbar for Categories -->
 <div class="container-fluid px-0">
