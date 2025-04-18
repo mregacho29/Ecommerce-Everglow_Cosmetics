@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "auth/sign_in"
+  get "auth/register"
   scope "(:locale)", locale: /en|fr/ do
     get "favourites/index"
     get "carts/show"
