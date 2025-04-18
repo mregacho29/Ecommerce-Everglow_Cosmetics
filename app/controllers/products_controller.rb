@@ -9,8 +9,11 @@ class ProductsController < ApplicationController
 
 
   def search
-    @query = params[:query]
-    @products = Product.where('name ILIKE ?', "%#{@query}%")
+    if params[:query].present?
+      @products = Product.where("LOWER(name) LIKE ?", "%#{params[:query].downcase}%")
+    else
+      @products = Product.all
+    end
     render :index
   end
 
