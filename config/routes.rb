@@ -15,6 +15,12 @@ Rails.application.routes.draw do
     post "cart/add", to: "carts#add", as: :add_to_cart
     delete "cart/remove", to: "carts#remove", as: :remove_from_cart
 
+
+    post "checkout/create", to: "checkout#create", as: :checkout_create
+    get "checkout/success", to: "checkout#success", as: :checkout_success
+    get "checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
+
+
     get "search", to: "products#search", as: :search
     get "favourites", to: "favourites#index", as: :favourites
 
