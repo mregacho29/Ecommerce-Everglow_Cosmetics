@@ -38,14 +38,14 @@
 
       <!-- Sign In/Sign Up Dropdown -->
       <% if user_signed_in? %>
-        <div class="btn-group">
+      <div class="btn-group">
         <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-person"></i> Account
         </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-          <li><%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'dropdown-item' %></li>
-          </ul>
-        </div>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <%= render 'shared/account_links' %>
+        </ul>
+      </div>
       <% else %>
         <div class="btn-group">
           <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

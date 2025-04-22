@@ -32,6 +32,10 @@ Rails.application.routes.draw do
     end
 
 
+    # Cart routes
+    resource :address, only: [ :new, :create, :edit, :update ]
+
+
     post "favorites/add", to: "favorites#add", as: :favorite_add
     post "cart/add", to: "carts#add", as: :cart_add
 
