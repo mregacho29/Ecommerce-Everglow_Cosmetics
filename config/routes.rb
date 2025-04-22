@@ -31,6 +31,11 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :cart, only: [ :show ] do
+      patch :update_quantity, to: "carts#update_quantity"
+      delete :remove, to: "carts#remove"
+    end
+
     devise_for :users
 
     # Devise and ActiveAdmin routes
