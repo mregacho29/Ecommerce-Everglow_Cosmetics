@@ -1,26 +1,27 @@
 Rails.application.routes.draw do
+  # Authentication routes
   get "auth/sign_in"
   get "auth/register"
-  scope "(:locale)", locale: /en|fr/ do
-    get "favourites/index"
-    get "carts/show"
 
+  # Scoped routes for localization (English and French)
+  scope "(:locale)", locale: /en|fr/ do
     # Static pages
     get "contact", to: "pages#show", defaults: { slug: "contact" }, as: :contact
     get "about", to: "pages#show", defaults: { slug: "about" }, as: :about
     get "stores", to: "pages#stores", as: :stores
     get "services", to: "pages#services", as: :services
 
+    # Cart routes
     get "cart", to: "carts#show", as: :cart
     post "cart/add", to: "carts#add", as: :add_to_cart
     delete "cart/remove", to: "carts#remove", as: :remove_from_cart
 
-
+    # Checkout routes
     post "checkout/create", to: "checkout#create", as: :checkout_create
     get "checkout/success", to: "checkout#success", as: :checkout_success
     get "checkout/cancel", to: "checkout#cancel", as: :checkout_cancel
 
-
+    # Search and Favourites routes
     get "search", to: "products#search", as: :search
     get "favourites", to: "favourites#index", as: :favourites
 
@@ -31,22 +32,25 @@ Rails.application.routes.draw do
       end
     end
 
-
-    # Cart routes
+    # Address routes
     resource :address, only: [ :new, :create, :edit, :update ]
 
-
+    # Favorites routes
     post "favorites/add", to: "favorites#add", as: :favorite_add
-    post "cart/add", to: "carts#add", as: :cart_add
 
-    resource :cart, only: [ :show ] do
-      patch :update_quantity, to: "carts#update_quantity"
-      delete :remove, to: "carts#remove"
+    # Organized Cart routes with shipping and checkout
+    resources :carts, only: [ :show ] do
+      collection do
+        get :shipping, to: "carts#shipping", as: :shipping
+        post :save_shipping, to: "carts#save_shipping", as: :save_shipping
+        post :checkout, to: "carts#checkout", as: :checkout
+      end
     end
 
+    # Devise routes for users
     devise_for :users
 
-    # Devise and ActiveAdmin routes
+    # Devise and ActiveAdmin routes for admin users
     devise_for :admin_users, ActiveAdmin::Devise.config
     ActiveAdmin.routes(self)
 

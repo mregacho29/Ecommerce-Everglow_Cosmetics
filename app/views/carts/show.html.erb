@@ -41,10 +41,20 @@
     </div>
     <div class="d-flex gap-2 mt-4">
       <%= link_to "Continue Shopping", products_path, class: "btn btn-secondary" %>
-      <%= form_with url: checkout_create_path, method: :post, local: true do |f| %>
-        <%= f.hidden_field :product_id, value: @cart.keys.first %>
-        <%= f.submit "Checkout", class: "btn btn-primary" %>
-      <% end %>
+
+      <% if user_signed_in? %>
+        <% if current_user.address.present? %>
+          <%= link_to "Proceed to Checkout", checkout_carts_path, method: :post, class: "btn btn-primary" %>
+        <% else %>
+          <%= link_to "Add Shipping Information", new_address_path, class: "btn btn-warning" %>
+        <% end %>
+        <% else %> <!-- non-authenticated branch -->
+          <% if session[:shipping_info].present? %>
+            <%= link_to "Proceed to Checkout", checkout_carts_path, method: :post, class: "btn btn-primary" %>
+          <% else %>
+            <%= link_to "Proceed to Shipping", shipping_carts_path, class: "btn btn-primary" %>
+          <% end %>
+        <% end %>
     </div>
   <% else %>
     <div class="alert alert-warning" role="alert">
