@@ -18,7 +18,19 @@
       <p><strong>Description:</strong> <%= @product.description %></p>
       <p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
       <p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
-      <%= link_to 'Back to Products', products_path, class: "btn btn-secondary mt-3" %>
+      <p><strong>Category:</strong> <%= @product.category.name %></p>
+
+
+      <!-- Buttons Row -->
+      <div class="d-flex align-items-center gap-2 mt-3">
+        <%= form_with url: cart_add_path, method: :post, local: true, class: "d-flex align-items-center gap-2" do |f| %>
+          <%= f.hidden_field :product_id, value: @product.id %>
+          <%= f.number_field :quantity, value: 1, min: 1, max: @product.stock_quantity, class: "form-control w-auto" %>
+          <%= f.submit 'Add to Cart', class: "btn btn-primary" %>
+        <% end %>
+        <%= button_to 'Add to Favorite', favorite_add_path(product_id: @product.id), method: :post, class: "btn btn-warning" %>
+        <%= link_to 'Back to Products', products_path, class: "btn btn-secondary" %>
+      </div>
     </div>
   </div>
 </div>

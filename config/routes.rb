@@ -31,6 +31,10 @@ Rails.application.routes.draw do
       end
     end
 
+
+    post "favorites/add", to: "favorites#add", as: :favorite_add
+    post "cart/add", to: "carts#add", as: :cart_add
+
     resource :cart, only: [ :show ] do
       patch :update_quantity, to: "carts#update_quantity"
       delete :remove, to: "carts#remove"
