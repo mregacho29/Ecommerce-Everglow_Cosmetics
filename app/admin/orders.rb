@@ -1,6 +1,9 @@
 ActiveAdmin.register Order do
   actions :all, except: [ :destroy ]
 
+  # Permit parameters for mass assignment
+  permit_params :status
+
   # Custom action to mark an order as shipped
   member_action :mark_as_shipped, method: :put do
     resource.update(status: :shipped)
@@ -30,5 +33,13 @@ ActiveAdmin.register Order do
     column :created_at
     column :updated_at
     actions
+  end
+
+  # Form configuration for editing orders
+  form do |f|
+    f.inputs do
+      f.input :status, as: :select, collection: Order.statuses.keys
+    end
+    f.actions
   end
 end
