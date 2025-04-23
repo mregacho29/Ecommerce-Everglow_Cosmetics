@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
          def self.ransackable_attributes(auth_object = nil)
           # List only the attributes you want to make searchable
-          ["created_at", "email", "first_name", "id", "role", "updated_at"]
+          [ "created_at", "email", "first_name", "id", "role", "updated_at" ]
         end
 
   def self.ransackable_associations(auth_object = nil)
