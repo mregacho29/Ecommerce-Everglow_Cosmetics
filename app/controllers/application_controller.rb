@@ -13,12 +13,4 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
-  def set_locale
-    I18n.locale = valid_locale(params[:locale]) || I18n.default_locale
-  end
-
-  def valid_locale(locale)
-    I18n.available_locales.map(&:to_s).include?(locale) ? locale : nil
-  end
 end
