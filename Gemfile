@@ -27,6 +27,7 @@ gem "sass-rails"
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'faker'
 gem 'pexels'
+gem 'stripe'
 
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
