@@ -1,0 +1,28 @@
+=> 
+[[32m#<Order:0x00007f0dce20f570[0m
+  id: [34m[1m25[0m,
+  user_id: [34m[1m2[0m,
+  total_amount: [35m[1m0.3e2[0m,
+  tax_amount: [34m[1m3[0m,
+  created_at: [31m[1m"[0m[31m2025-04-23 20:20:49.334880000 +0000[0m[31m[1m"[0m,
+  updated_at: [31m[1m"[0m[31m2025-04-23 20:51:27.406184000 +0000[0m[31m[1m"[0m,
+  status: [31m[1m"[0m[31mcanceled[0m[31m[1m"[0m,
+  tax_id: [34m[1m5[0m[32m>[0m,
+ [32m#<Order:0x00007f0dce6b6560[0m
+  id: [34m[1m26[0m,
+  user_id: [34m[1m2[0m,
+  total_amount: [35m[1m0.10488e3[0m,
+  tax_amount: [36m[1mnil[0m,
+  created_at: [31m[1m"[0m[31m2025-04-23 21:38:57.759314000 +0000[0m[31m[1m"[0m,
+  updated_at: [31m[1m"[0m[31m2025-04-23 21:38:57.759314000 +0000[0m[31m[1m"[0m,
+  status: [31m[1m"[0m[31mcompleted[0m[31m[1m"[0m,
+  tax_id: [34m[1m5[0m[32m>[0m,
+ [32m#<Order:0x00007f0dce6b6420[0m
+  id: [34m[1m27[0m,
+  user_id: [34m[1m2[0m,
+  total_amount: [35m[1m0.35813e3[0m,
+  tax_amount: [36m[1mnil[0m,
+  created_at: [31m[1m"[0m[31m2025-04-23 22:07:29.388095000 +0000[0m[31m[1m"[0m,
+  updated_at: [31m[1m"[0m[31m2025-04-23 22:07:29.388095000 +0000[0m[31m[1m"[0m,
+  status: [31m[1m"[0m[31mcompleted[0m[31m[1m"[0m,
+  tax_id: [34m[1m5[0m[32m>[0m]

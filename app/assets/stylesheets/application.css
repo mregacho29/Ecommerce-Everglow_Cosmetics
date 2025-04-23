@@ -1,4 +1,9 @@
-/* Center alignment and animation for the search bar */
+/*
+ *= require_self
+ *= require custom
+ */
+
+ /* Center alignment and animation for the search bar */
 .search-bar-container {
   transition: all 0.3s ease-in-out;
   opacity: 0;

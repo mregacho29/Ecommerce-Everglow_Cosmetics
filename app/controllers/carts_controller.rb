@@ -1,6 +1,10 @@
 class CartsController < ApplicationController
   def show
     @cart = session[:cart] || {}
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Cart", path: cart_path } # Current page
+    ]
   end
 
   def add

@@ -1,0 +1,17 @@
+<% if breadcrumbs.present? %>
+  <nav aria-label="breadcrumb" style="margin-top: 1rem;">
+    <ol class="breadcrumb">
+      <% breadcrumbs.each_with_index do |crumb, index| %>
+        <% if index == breadcrumbs.size - 1 %>
+          <!-- Active breadcrumb (current page) -->
+          <li class="breadcrumb-item active" aria-current="page"><%= crumb[:name] %></li>
+        <% else %>
+          <!-- Link to previous breadcrumb -->
+          <li class="breadcrumb-item">
+            <%= link_to crumb[:name], crumb[:path] %>
+          </li>
+        <% end %>
+      <% end %>
+    </ol>
+  </nav>
+<% end %>

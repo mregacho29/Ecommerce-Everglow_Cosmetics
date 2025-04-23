@@ -1,4 +1,6 @@
-<div class="container mt-5">
+  <!-- Breadcrumbs -->
+  <%= render "shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+  <div class="container mt-5">
   <h1 class="text-center mb-4">Past Orders</h1>
 
   <% if @orders.any? %>
@@ -14,9 +16,9 @@
           <div class="row">
             <div class="col-md-6">
               <p class="mb-1"><strong>Status:</strong> <%= order.status.capitalize %></p>
-              <p class="mb-1"><strong>Tax:</strong> $<%= order.tax %></p>
+              <p class="mb-1"><strong>Tax:</strong> <%= number_to_currency(order.tax_amount) %></p>
               <p class="mb-1"><strong>Total Amount:</strong> $<%= order.calculate_total_amount %></p>
-              <p class="mb-1"><strong>Grand Total:</strong> $<%= (order.total_amount.to_f + order.calculate_tax.to_f).round(2) %></p>
+              <p class="mb-1"><strong>Grand Total:</strong> <%= number_to_currency(order.grand_total) %></p>
             </div>
             <% if order.payment %>
               <div class="col-md-6">

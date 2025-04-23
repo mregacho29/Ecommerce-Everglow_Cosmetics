@@ -20,6 +20,11 @@ class FavoritesController < ApplicationController
     else
       @favorites = nil # Ensure @favorites is nil for non-authenticated users
     end
+
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Favorites", path: favorites_path } # Current page
+    ]
   end
 
   def remove

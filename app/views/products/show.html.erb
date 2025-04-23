@@ -1,4 +1,7 @@
 <div class="container my-5">
+  <!-- Breadcrumbs -->
+  <%= render "shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
+
   <div class="row">
     <div class="col-md-6">
       <% if @product.image_url.present? %>
@@ -19,7 +22,6 @@
       <p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
       <p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
       <p><strong>Category:</strong> <%= @product.category.name %></p>
-
 
       <!-- Buttons Row -->
       <div class="d-flex align-items-center gap-2 mt-3">

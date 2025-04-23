@@ -1,3 +1,5 @@
+  <!-- Breadcrumbs -->
+  <%= render "shared/breadcrumbs", breadcrumbs: @breadcrumbs %>
 <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
   <% if user_signed_in? %>
     <% if @favorites.present? && @favorites.any? %>

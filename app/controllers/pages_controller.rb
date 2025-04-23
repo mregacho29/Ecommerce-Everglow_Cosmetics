@@ -13,5 +13,11 @@ class PagesController < ApplicationController
       longitude: -74.0060,
       website: "https://everglowcosmetics.com"
     }
+
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Stores", path: stores_path },
+      { name: @store[:name], path: "#" }
+    ]
   end
 end

@@ -1,7 +1,13 @@
 class ProductsController < ApplicationController
   def index
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Products", path: products_path } # Current page
+    ]
+
     # Start with all products
     @products = Product.all
+
 
     # Filter by category if present
     if params[:category].present?
@@ -51,6 +57,11 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Products", path: products_path },
+      { name: @product.name, path: product_path(@product) } # Current page
+    ]
   end
 
 
@@ -71,6 +82,11 @@ class ProductsController < ApplicationController
 
     # Paginate the results
     @products = @products.page(params[:page]).per(9)
+
+    @breadcrumbs = [
+      { name: "Home", path: root_path },
+      { name: "Search Results", path: search_products_path(query: params[:query]) } # Current page
+    ]
 
     render :index
   end

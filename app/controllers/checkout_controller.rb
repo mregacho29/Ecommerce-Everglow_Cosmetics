@@ -55,21 +55,23 @@ class CheckoutController < ApplicationController
     # Redirect to Stripe Checkout
     redirect_to stripe_session.url, allow_other_host: true
   end
+
   def success
     if session[:cart].present?
       if user_signed_in?
         # Calculate total and tax before creating the order
         total_amount = calculate_cart_total
-        tax = calculate_tax_for_user
+        tax_amount = calculate_tax_for_user # Calculate the tax amount
 
         # Fetch the user's province and associated tax record
         user_province = current_user.address&.province
         tax_record = Tax.find_by(province: user_province)
 
-        # Save the order
+        # Save the order with the tax amount
         order = Order.create(
           user_id: current_user.id,
           total_amount: total_amount,
+          tax_amount: tax_amount, # Save the calculated tax amount
           tax_id: tax_record&.id, # Assign the tax record's ID
           status: "completed"
         )
@@ -90,7 +92,7 @@ class CheckoutController < ApplicationController
           order_id: order.id,
           payment_method: "Stripe",
           payment_status: "completed",
-          amount_paid: total_amount + tax
+          amount_paid: total_amount + tax_amount
         )
 
         flash[:notice] = "Payment successful! Thank you for your purchase. Your order ##{order.id} has been placed."
@@ -106,6 +108,7 @@ class CheckoutController < ApplicationController
     redirect_to root_path
   end
 
+
   def calculate_cart_total
     session[:cart].sum do |product_id, quantity|
       product = Product.find_by(id: product_id)
@@ -117,21 +120,20 @@ class CheckoutController < ApplicationController
     total = calculate_cart_total
 
     # Fetch the province from the user's address
-    user_province = current_user.address&.province # Use safe navigation to avoid nil errors
+    user_province = current_user.address&.province
     tax_record = Tax.find_by(province: user_province)
     if tax_record.nil?
       flash[:alert] = "Tax information is missing for your province. Please contact support."
       redirect_to cart_path and return
     end
 
-    if tax
-      gst = (total * tax.gst).round(2)
-      pst = (total * tax.pst).round(2)
-      hst = (total * tax.hst).round(2)
-      (gst + pst + hst).round(2)
-    else
-      0 # Default to no tax if no matching province is found
-    end
+    # Calculate GST, PST, and HST based on the tax record
+    gst = (total * tax_record.gst).round(2)
+    pst = (total * tax_record.pst).round(2)
+    hst = (total * tax_record.hst).round(2)
+
+    # Return the total tax amount
+    (gst + pst + hst).round(2)
   end
 
   def cancel
