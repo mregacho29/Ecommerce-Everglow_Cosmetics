@@ -1,5 +1,12 @@
 class CheckoutController < ApplicationController
   def create
+    # Ensure the user has an address
+    unless current_user.address.present?
+      redirect_to new_address_path, alert: "Please add your shipping information before proceeding to checkout."
+      return
+    end
+
+
     # Ensure the cart is not empty
     if session[:cart].blank?
       redirect_to cart_path, alert: "Your cart is empty."
@@ -12,7 +19,7 @@ class CheckoutController < ApplicationController
 
       {
         price_data: {
-          currency: "cad", # Adjust currency as needed
+          currency: "cad", # Canadian Dollar
           product_data: {
             name: product.name,
             description: product.description
@@ -23,13 +30,13 @@ class CheckoutController < ApplicationController
       }
     end
 
-    # Calculate tax and add it as a separate line item
-    tax = calculate_tax
+    # Calculate tax based on the user's province
+    tax = calculate_tax_for_user
     line_items << {
       price_data: {
         currency: "cad",
         product_data: {
-          name: "Tax (GST + PST)"
+          name: "Tax (GST + PST + HST)"
         },
         unit_amount: (tax * 100).to_i # Stripe expects amounts in cents
       },
@@ -49,13 +56,12 @@ class CheckoutController < ApplicationController
     redirect_to stripe_session.url, allow_other_host: true
   end
 
-
   def success
     if session[:cart].present?
       if user_signed_in?
         # Calculate total and tax before creating the order
         total_amount = calculate_cart_total
-        tax = calculate_tax
+        tax = calculate_tax_for_user
 
         # Save the order
         order = Order.create(
@@ -104,11 +110,21 @@ class CheckoutController < ApplicationController
     end
   end
 
-  def calculate_tax
+  def calculate_tax_for_user
     total = calculate_cart_total
-    gst = (total * 0.05).round(2)
-    pst = (total * 0.07).round(2)
-    (gst + pst).round(2)
+
+    # Fetch the province from the user's address
+    user_province = current_user.address&.province # Use safe navigation to avoid nil errors
+    tax = Tax.find_by(province: user_province)
+
+    if tax
+      gst = (total * tax.gst).round(2)
+      pst = (total * tax.pst).round(2)
+      hst = (total * tax.hst).round(2)
+      (gst + pst + hst).round(2)
+    else
+      0 # Default to no tax if no matching province is found
+    end
   end
 
   def cancel
