@@ -172,6 +172,9 @@ require_relative '../lib/scraper'
 
 
 
+# Clean up existing tags and associations
+Tag.destroy_all
+puts "Existing tags and associations cleared!"
 
 # Define tags and their associated keywords
 tags_keywords = {
@@ -183,20 +186,15 @@ tags_keywords = {
   'Powder' => [ 'setting powder', 'foundation', 'blush', 'bronzer', 'highlighter', 'compact' ]
 }
 
-# Create tags in the database
-tags_keywords.keys.each do |tag_name|
-  Tag.find_or_create_by!(name: tag_name)
-end
-
-# Associate tags with existing products based on name or description
-Product.find_each do |product|
-  tags_keywords.each do |tag_name, keywords|
-    # Check if any keyword matches the product's name or description
-    if keywords.any? { |keyword| product.name.downcase.include?(keyword) || product.description.to_s.downcase.include?(keyword) }
-      tag = Tag.find_by(name: tag_name)
+# Create individual tags for each keyword and associate them with products
+tags_keywords.each do |category_name, keywords|
+  keywords.each do |keyword|
+    tag = Tag.find_or_create_by!(name: keyword) # Create a tag for each keyword
+    # Associate the tag with products whose name or description matches the keyword
+    Product.where("LOWER(name) LIKE ? OR LOWER(description) LIKE ?", "%#{keyword.downcase}%", "%#{keyword.downcase}%").each do |product|
       product.tags << tag unless product.tags.include?(tag)
     end
   end
 end
 
-puts "Tags associated with existing products based on name and description!"
+puts "Tags created and associated with products based on keywords!"

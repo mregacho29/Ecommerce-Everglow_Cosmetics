@@ -4,14 +4,15 @@ class CartsController < ApplicationController
   end
 
   def add
-    product_id = params[:product_id]
+    product = Product.find(params[:product_id])
     quantity = params[:quantity].to_i
 
     session[:cart] ||= {}
-    session[:cart][product_id] ||= 0
-    session[:cart][product_id] += quantity
+    session[:cart][product.id.to_s] ||= 0
+    session[:cart][product.id.to_s] += quantity
 
-    redirect_to cart_path, notice: "Product added to cart!"
+    flash[:notice] = "#{product.name} has been added to your cart."
+    redirect_to products_path
   end
 
   def remove

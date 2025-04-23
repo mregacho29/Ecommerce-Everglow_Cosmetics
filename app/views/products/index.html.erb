@@ -1,43 +1,100 @@
-<h1 class="d-flex justify-content-start my-4">Chosen For You</h1>
-
-<div class="mb-3">
-  <%= link_to "Show All Products", products_path, class: "btn btn-secondary" %>
-  <%= link_to "On Sale (Below $50)", products_path(filter: "on_sale"), class: "btn btn-primary" %>
-</div>
-
 <div class="container">
   <div class="row">
-    <% @products.each do |product| %>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <% if product.image_url.present? %>
-            <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 200px; object-fit: cover;">
-          <% elsif product.image.attached? %>
-            <%= image_tag url_for(product.image), class: "card-img-top", alt: product.name, style: "height: 200px; object-fit: cover;" %>
-          <% else %>
-            <%= image_tag "placeholder.png", class: "card-img-top", alt: "Default product image", style: "height: 200px; object-fit: cover;" %>
-          <% end %>
-          <div class="card-body">
-            <h5 class="card-title"><%= product.name %></h5>
-            <p class="card-text">Price: <%= number_to_currency(product.price) %></p>
-            <p class="card-text">Stock: <%= product.stock_quantity %></p>
+    <!-- Sidebar for Tags -->
+    <div class="col-md-3 mt-3">
+      <%# Check if tags are present and display them dynamically based on the selected category %>
+      <% if @tags.present? %>
+        <h4><%= params[:category].present? ? params[:category].capitalize : "All Categories" %></h4>
+        <div class="invisible-tags">
+          <ul class="list-group">
+            <%# Loop through each tag and display it with the product count %>
+            <% @tags.each do |tag| %>
+              <li class="list-group-item">
+                <%= link_to "#{tag.name} (#{tag.product_count})", products_path(tag: tag.name), class: "text-decoration-none" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% else %>
+        <%# Display a message if no tags are available %>
+        <p>No tags available for this category.</p>
+      <% end %>
+    </div>
 
-            <div class="d-flex flex-column gap-2 align-items-center">
-              <%= link_to 'View Details', product_path(product), class: "btn btn-primary btn-sm" %>
-              <%= form_with url: add_to_cart_path, method: :post, local: true, class: "d-inline-flex align-items-center justify-content-center" do |f| %>
-                <%= f.hidden_field :product_id, value: product.id %>
-                <%= f.number_field :quantity, value: 1, min: 1, class: "form-control form-control-sm w-50 me-2" %>
-                <%= f.submit "Add", class: "btn btn-success btn-sm" %>
+    <!-- Main Product Grid -->
+    <div class="col-md-9">
+      <%# Page title %>
+      <h1 class="d-flex justify-content-start my-4">Chosen For You</h1>
+
+      <%# Filter buttons for showing all products or products on sale %>
+      <div class="mb-3">
+        <%= link_to "Show All Products", products_path, class: "btn btn-secondary" %>
+        <%= link_to "On Sale (Below $50)", products_path(filter: "on_sale"), class: "btn btn-primary" %>
+      </div>
+
+      <div class="row">
+        <%# Loop through each product and display its details %>
+        <% @products.each do |product| %>
+          <div class="col-md-4 mb-4">
+            <div class="card h-100">
+              <%# Display product image or a placeholder if no image is available %>
+              <% if product.image_url.present? %>
+                <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 200px; object-fit: cover;">
+              <% elsif product.image.attached? %>
+                <%= image_tag url_for(product.image), class: "card-img-top", alt: product.name, style: "height: 200px; object-fit: cover;" %>
+              <% else %>
+                <%= image_tag "placeholder.png", class: "card-img-top", alt: "Default product image", style: "height: 200px; object-fit: cover;" %>
               <% end %>
+
+              <div class="card-body">
+                <%# Display product name, price, and stock quantity %>
+                <h5 class="card-title"><%= truncate(product.name, length: 70) %></h5>
+                <p class="card-text">Price: <%= number_to_currency(product.price) %></p>
+                <p class="card-text">Stock: <%= product.stock_quantity %></p>
+
+                <%# Buttons for viewing product details and adding to cart %>
+                <div class="d-flex align-items-center gap-2">
+                  <%= link_to 'View Details', product_path(product), class: "btn btn-primary btn-sm flex-shrink-0" %>
+                  <%= form_with url: cart_add_path, method: :post, local: true, class: "d-flex align-items-center" do |f| %>
+                    <%= f.hidden_field :product_id, value: product.id %>
+                    <%= f.number_field :quantity, value: 1, min: 1, class: "form-control form-control-sm w-50 me-2" %>
+                    <%= f.submit "Add", class: "btn btn-success btn-sm flex-shrink-0" %>
+                  <% end %>
+                </div>
+
+                <%# Display badges for "On Sale" and "Out of Stock" %>
+                <div class="mt-2">
+                  <% if product.on_sale? %>
+                    <span class="badge bg-danger">On Sale</span>
+                  <% end %>
+                  <% if product.stock_quantity == 0 %>
+                    <span class="badge bg-secondary">Out of Stock</span>
+                  <% end %>
+                </div>
+
+                <%# Display product tags if available %>
+                <div class="mt-2">
+                  <% if product.tags.any? %>
+                    <p>Tags:</p>
+                    <ul class="list-inline">
+                      <% product.tags.each do |tag| %>
+                        <li class="list-inline-item">
+                          <%= link_to tag.name, products_path(tag: tag.name), class: "badge bg-info text-decoration-none" %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  <% end %>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        <% end %>
       </div>
-    <% end %>
-  </div>
-</div>
 
-<!-- Pagination Links -->
-<div class="d-flex justify-content-start">
-  <%= paginate @products, theme: 'bootstrap-4' %>
+      <%# Pagination links for navigating through products %>
+      <div class="d-flex justify-content-start">
+        <%= paginate @products, theme: 'bootstrap-4' %>
+      </div>
+    </div>
+  </div>
 </div>

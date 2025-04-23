@@ -24,7 +24,7 @@
 
               <!-- Quantity -->
               <td>
-                <%= form_with url: add_to_cart_path, method: :post, local: true, class: "d-inline" do |f| %>
+                <%= form_with url: cart_add_path, method: :post, local: true, class: "d-inline" do |f| %>
                   <%= f.hidden_field :product_id, value: product.id %>
                   <%= f.number_field :quantity, value: quantity, min: 1, class: "form-control form-control-sm d-inline w-50" %>
                 <% end %>

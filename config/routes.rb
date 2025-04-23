@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Category routes
+  get "categories/show"
+
   # Authentication routes
   get "auth/sign_in"
   get "auth/register"
@@ -12,9 +15,10 @@ Rails.application.routes.draw do
     get "services", to: "pages#services", as: :services
 
     # Cart routes
-    get "cart", to: "carts#show", as: :cart
-    post "cart/add", to: "carts#add", as: :add_to_cart
-    delete "cart/remove", to: "carts#remove", as: :remove_from_cart
+    # Ensure these routes point to the correct controller (CartsController)
+    get "cart", to: "carts#show", as: :cart # Displays the cart
+    post "cart/add", to: "carts#add", as: :cart_add # Adds an item to the cart
+    delete "cart/remove", to: "carts#remove", as: :remove_from_cart # Removes an item from the cart
 
     # Checkout routes
     post "checkout/create", to: "checkout#create", as: :checkout_create
@@ -46,6 +50,9 @@ Rails.application.routes.draw do
         post :checkout, to: "carts#checkout", as: :checkout
       end
     end
+
+    # Category routes
+    resources :categories, only: [ :show ]
 
     # Devise routes for users
     devise_for :users

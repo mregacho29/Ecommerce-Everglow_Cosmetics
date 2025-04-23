@@ -16,6 +16,12 @@ class Product < ApplicationRecord
     [ "category_id", "created_at", "description", "id", "image_url", "name", "price", "stock_quantity", "updated_at" ]
   end
 
+  def on_sale?
+    # Define the logic for a product being "on sale"
+    # Example: A product is on sale if its price is below $50
+    price < 50
+  end
+
 
   def display_image
     # Use the uploaded image if present, otherwise fallback to the image_url

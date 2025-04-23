@@ -1,11 +1,36 @@
 class ProductsController < ApplicationController
   def index
+    # Start with all products
     @products = Product.all
 
     # Filter by category if present
     if params[:category].present?
       category = Category.where("LOWER(name) = ?", params[:category].downcase).first
-      @products = category.present? ? category.products : Product.none
+      if category.present?
+        @products = category.products
+        # Fetch only the first 5 tags dynamically for the selected category with product counts
+        @tags = Tag.joins(:products)
+                   .where(products: { category_id: category.id })
+                   .distinct
+                   .limit(5)
+                   .select("tags.name, COUNT(products.id) AS product_count")
+                   .group("tags.id")
+      else
+        @products = Product.none
+        @tags = [] # No tags if the category doesn't exist
+      end
+    else
+      # Fetch only the first 5 tags if no category is selected with product counts
+      @tags = Tag.joins(:products)
+                 .distinct
+                 .limit(5)
+                 .select("tags.name, COUNT(products.id) AS product_count")
+                 .group("tags.id")
+    end
+
+    # Filter by tag if present
+    if params[:tag].present?
+      @products = @products.joins(:tags).where(tags: { name: params[:tag] })
     end
 
     # Filter by "new" or "recently updated" if present
@@ -23,7 +48,6 @@ class ProductsController < ApplicationController
     # Paginate the results
     @products = @products.page(params[:page]).per(9)
   end
-
 
   def show
     @product = Product.find(params[:id])
@@ -50,6 +74,8 @@ class ProductsController < ApplicationController
 
     render :index
   end
+
+
 
   def stores
   end
