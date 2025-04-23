@@ -15,9 +15,8 @@ class FavoritesController < ApplicationController
   end
 
   def index
-    @favorites = user_signed_in? ? current_user.favorites.includes(:product) : []
+    @favorites = current_user.favorites.includes(:product).page(params[:page]).per(9) # Paginate with 9 products per page
   end
-
 
   def remove
     favorite = current_user.favorites.find(params[:id])
