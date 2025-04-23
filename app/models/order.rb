@@ -6,8 +6,10 @@ class Order < ApplicationRecord
 
   validates :total_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
-  # Calculate the total price of the order
-  def total_amount
+  enum :status, { pending: 0, completed: 1, canceled: 2 }
+
+  # Rename the method to avoid conflict
+  def calculate_total_amount
     order_items.sum { |item| item.quantity * item.price }
   end
 
