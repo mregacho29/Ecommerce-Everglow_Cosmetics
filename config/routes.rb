@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "orders/index"
+  get "orders/show"
   # Category routes
   get "categories/show"
 
@@ -58,6 +60,12 @@ Rails.application.routes.draw do
 
     # Category routes
     resources :categories, only: [ :show ]
+
+    # Order routes
+    resources :orders, only: [ :index, :show ] # For customers
+    namespace :admin do
+      resources :orders, only: [ :index, :show ] # For admins
+    end
 
     # Devise routes for users
     devise_for :users
