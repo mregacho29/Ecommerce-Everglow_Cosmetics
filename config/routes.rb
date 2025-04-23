@@ -8,20 +8,6 @@ Rails.application.routes.draw do
   get "auth/sign_in"
   get "auth/register"
 
-<<<<<<< HEAD
-  resources :products, only: [ :index, :show ]
-  resources :categories, only: [ :index, :show ]
-  resources :orders, only: [ :new, :create, :show ]
-  resources :cart, only: [ :show ]
-  resources :users, only: [ :new, :create ]
-  resources :sessions, only: [ :new, :create, :destroy ]
-  resources :addresses, only: [ :new, :create ]
-  resources :payments, only: [] do
-    member do
-      put :confirm
-    end
-  end
-=======
   # Scoped routes for localization (English and French)
   scope "(:locale)", locale: /en|fr/ do
     # Static pages
@@ -43,7 +29,6 @@ Rails.application.routes.draw do
 
     # Search and Favourites routes
     get "search", to: "products#search", as: :search
->>>>>>> de9f2068b10d9551b9891188d36686f1276badb1
 
     # Products routes
     resources :products, only: [ :index, :show ] do
