@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_23_205040) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_23_171307) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -185,6 +185,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_23_205040) do
     t.datetime "updated_at", null: false
   end
 
+<<<<<<< HEAD
   create_table "taxes", force: :cascade do |t|
     t.string "province"
     t.decimal "gst"
@@ -194,6 +195,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_23_205040) do
     t.datetime "updated_at", null: false
   end
 
+=======
+>>>>>>> de9f2068b10d9551b9891188d36686f1276badb1
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "email"

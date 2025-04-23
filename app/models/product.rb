@@ -1,7 +1,11 @@
 class Product < ApplicationRecord
   belongs_to :category
-  has_many :order_items
-  has_many :orders, through: :order_items
+  has_and_belongs_to_many :tags
+
+  has_many :favorites, dependent: :destroy
+  has_many :favorited_by_users, through: :favorites, source: :user
+
+
   has_one_attached :image # ActiveStorage attachment
   validates :name, presence: true
   validates :description, presence: true
@@ -14,6 +18,12 @@ class Product < ApplicationRecord
 
   def self.ransackable_attributes(auth_object = nil)
     [ "category_id", "created_at", "description", "id", "image_url", "name", "price", "stock_quantity", "updated_at" ]
+  end
+
+  def on_sale?
+    # Define the logic for a product being "on sale"
+    # Example: A product is on sale if its price is below $50
+    price < 50
   end
 
 

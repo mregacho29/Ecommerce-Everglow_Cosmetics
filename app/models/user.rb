@@ -1,6 +1,12 @@
 class User < ApplicationRecord
-  # Include default Devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable, and :omniauthable
+  has_one :address, dependent: :destroy
+  accepts_nested_attributes_for :address
+  has_many :favorites, dependent: :destroy
+  has_many :favorite_products, through: :favorites, source: :product
+
+  # Add this association
+  has_many :orders, dependent: :destroy
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 

@@ -1,0 +1,30 @@
+<!-- filepath: app/views/categories/show.html.erb -->
+<div class="container">
+  <div class="row">
+    <!-- Left: Products -->
+    <div class="col-md-8">
+      <h1><%= @category.name %></h1>
+      <div class="products">
+        <% @products.each do |product| %>
+          <div class="product">
+            <h2><%= product.name %></h2>
+            <p><%= product.description %></p>
+            <p><%= number_to_currency(product.price) %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Right: Tags -->
+    <div class="col-md-4">
+      <h2>Tags</h2>
+      <ul>
+        <% @tags.each do |tag| %>
+          <li>
+            <%= link_to tag.name, category_path(@category, tag: tag.name) %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -4,11 +4,40 @@
       <div class="card mb-4">
         <div class="card-body">
           <h1 class="card-title"><%= @store[:name] %></h1>
-          <p class="card-text"><%= @store[:city] %>, <%= @store[:state] %>, <%= @store[:country] %></p>
+          <p class="card-text">Winnipeg, Manitoba, Canada</p>
+          <p class="card-text">204-432-6543</p>
+
           <% if @store[:website].present? %>
             <p class="card-text"><%= link_to @store[:website], @store[:website], target: "_blank", rel: "noopener" %></p>
           <% else %>
             <p class="card-text">No website available</p>
+          <% end %>
+
+          <div class="mt-4">
+            <h5><strong>Store Hours</strong></h5>
+            <ul class="list-unstyled">
+              <li><strong>Mon - Fri:</strong> 10:00 AM - 9:00 PM</li>
+              <li><strong>Sat:</strong> 10:00 AM - 7:00 PM</li>
+              <li><strong>Sun:</strong> 11:00 AM - 6:00 PM</li>
+            </ul>
+          </div>
+
+          <div class="mt-4">
+            <h5><strong>Curbside Hours</strong></h5>
+            <ul class="list-unstyled">
+              <li><strong>Mon - Sat:</strong> 10:00 AM - 6:00 PM</li>
+              <li><strong>Sun:</strong> 11:00 AM - 5:00 PM</li>
+            </ul>
+          </div>
+
+          <p class="card-text mt-4"><strong>Curbside Pickup Available:</strong> This store offers curbside pickup for Buy Online & Pick Up orders. When your order is ready, park your car in the spot described below and then upon arrival begin the online check-in process with the make and color of your car.</p>
+          <ol>
+            <li>Enter entrance adjacent to bus terminal facing Portage Ave.</li>
+            <li>Look for curbside pickup space.</li>
+            <li>Park in designated space.</li>
+          </ol>
+          <%= link_to "https://www.google.com/maps/dir/?api=1&destination=49.895077,-97.138451", target: "_blank", class: "btn btn-primary" do %>
+            <i class="fas fa-map-marker-alt"></i> Get Directions
           <% end %>
         </div>
       </div>
@@ -17,18 +46,18 @@
       <div class="card mb-4">
         <div class="card-body">
           <h2 class="card-title">Location</h2>
-          <div id="map" style="width: 100%; height: 400px;"></div>
+          <div id="map" style="width: 100%; height: 600px;"></div> <!-- Increased map height -->
           <script>
             mapboxgl.accessToken = '<%= ENV["MAPBOX_ACCESS_TOKEN"] %>';
             var map = new mapboxgl.Map({
               container: 'map',
               style: 'mapbox://styles/mapbox/streets-v11',
-              center: [<%= @store[:longitude] %>, <%= @store[:latitude] %>],
+              center: [-97.138451, 49.895077], // Longitude and Latitude for Winnipeg, Manitoba, Canada
               zoom: 12
             });
 
             new mapboxgl.Marker()
-              .setLngLat([<%= @store[:longitude] %>, <%= @store[:latitude] %>])
+              .setLngLat([-97.138451, 49.895077]) // Longitude and Latitude for Winnipeg, Manitoba, Canada
               .addTo(map);
           </script>
         </div>

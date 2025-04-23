@@ -1,26 +1,23 @@
 class Order < ApplicationRecord
   belongs_to :user
+  has_one :payment
   has_many :order_items, dependent: :destroy
   has_many :products, through: :order_items
 
-  enum :status, { pending: 0, paid: 1, shipped: 2 }
+  validates :total_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
+
+  enum :status, { pending: 0, completed: 1, canceled: 2 }
+
+  # Rename the method to avoid conflict
+  def calculate_total_amount
+    order_items.sum { |item| item.quantity * item.price }
+  end
 
   def self.ransackable_associations(auth_object = nil)
-    auth_object ||= :default
-    [ "user", "order_items", "products" ]
+    [ "user" ]
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    auth_object ||= :default
     [ "created_at", "id", "status", "tax", "total_amount", "updated_at", "user_id" ]
-  end
-
-
-  def mark_as_paid
-    update!(status: :paid)
-  end
-
-  def mark_as_shipped
-    update!(status: :shipped)
   end
 end
