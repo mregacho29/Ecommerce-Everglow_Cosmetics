@@ -15,7 +15,11 @@ class FavoritesController < ApplicationController
   end
 
   def index
-    @favorites = current_user.favorites.includes(:product).page(params[:page]).per(9) # Paginate with 9 products per page
+    if user_signed_in?
+      @favorites = current_user.favorites.includes(:product).page(params[:page]).per(9) # Paginate with 9 products per page
+    else
+      @favorites = nil # Ensure @favorites is nil for non-authenticated users
+    end
   end
 
   def remove

@@ -1,6 +1,13 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
   <% if user_signed_in? %>
-    <%= render "favorites_list", favorites: @favorites %>
+    <% if @favorites.present? && @favorites.any? %>
+      <%= render "favorites_list", favorites: @favorites %>
+    <% else %>
+      <div class="text-center">
+        <h1 class="text-danger mb-3">Loves</h1>
+        <p class="text-muted">You have no favorites yet.</p>
+      </div>
+    <% end %>
   <% else %>
     <div class="text-center">
       <h1 class="text-danger mb-3">Loves</h1>
