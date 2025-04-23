@@ -2,12 +2,10 @@
   <div class="row">
     <!-- Sidebar for Tags -->
     <div class="col-md-3 mt-3">
-      <%# Check if tags are present and display them dynamically based on the selected category %>
       <% if @tags.present? %>
         <h4><%= params[:category].present? ? params[:category].capitalize : "All Categories" %></h4>
         <div class="invisible-tags">
           <ul class="list-group">
-            <%# Loop through each tag and display it with the product count %>
             <% @tags.each do |tag| %>
               <li class="list-group-item">
                 <%= link_to "#{tag.name} (#{tag.product_count})", products_path(tag: tag.name), class: "text-decoration-none" %>
@@ -16,28 +14,40 @@
           </ul>
         </div>
       <% else %>
-        <%# Display a message if no tags are available %>
         <p>No tags available for this category.</p>
       <% end %>
     </div>
 
     <!-- Main Product Grid -->
     <div class="col-md-9">
-      <%# Page title %>
       <h1 class="d-flex justify-content-start my-4">Chosen For You</h1>
 
-      <%# Filter buttons for showing all products or products on sale %>
       <div class="mb-3">
         <%= link_to "Show All Products", products_path, class: "btn btn-secondary" %>
         <%= link_to "On Sale (Below $50)", products_path(filter: "on_sale"), class: "btn btn-primary" %>
       </div>
 
       <div class="row">
-        <%# Loop through each product and display its details %>
         <% @products.each do |product| %>
           <div class="col-md-4 mb-4">
-            <div class="card h-100">
-              <%# Display product image or a placeholder if no image is available %>
+            <div class="card h-100 position-relative">
+              <%# Love Button %>
+              <div class="position-absolute top-0 end-0 m-2">
+                <% if user_signed_in? %>
+                  <%= form_with url: favorite_add_path, method: :post, local: true, class: "d-inline" do |f| %>
+                    <%= f.hidden_field :product_id, value: product.id %>
+                    <button type="submit" class="btn btn-light btn-sm p-2 rounded-circle shadow">
+                      <i class="bi bi-heart text-danger"></i>
+                    </button>
+                  <% end %>
+                <% else %>
+                  <button type="button" class="btn btn-light btn-sm p-2 rounded-circle shadow" data-bs-toggle="modal" data-bs-target="#signInModal">
+                    <i class="bi bi-heart text-danger"></i>
+                  </button>
+                <% end %>
+              </div>
+
+              <%# Product Image %>
               <% if product.image_url.present? %>
                 <img src="<%= product.image_url %>" class="card-img-top" alt="<%= product.name %>" style="height: 200px; object-fit: cover;">
               <% elsif product.image.attached? %>
@@ -47,12 +57,17 @@
               <% end %>
 
               <div class="card-body">
-                <%# Display product name, price, and stock quantity %>
+                <%# On Sale Badge %>
+                <% if product.on_sale? %>
+                  <span class="badge bg-danger mb-2">On Sale</span>
+                <% end %>
+
+                <%# Product Name and Price %>
                 <h5 class="card-title"><%= truncate(product.name, length: 70) %></h5>
                 <p class="card-text">Price: <%= number_to_currency(product.price) %></p>
                 <p class="card-text">Stock: <%= product.stock_quantity %></p>
 
-                <%# Buttons for viewing product details and adding to cart %>
+                <%# Buttons for Viewing Details and Adding to Cart %>
                 <div class="d-flex align-items-center gap-2">
                   <%= link_to 'View Details', product_path(product), class: "btn btn-primary btn-sm flex-shrink-0" %>
                   <%= form_with url: cart_add_path, method: :post, local: true, class: "d-flex align-items-center" do |f| %>
@@ -62,17 +77,12 @@
                   <% end %>
                 </div>
 
-                <%# Display badges for "On Sale" and "Out of Stock" %>
-                <div class="mt-2">
-                  <% if product.on_sale? %>
-                    <span class="badge bg-danger">On Sale</span>
-                  <% end %>
-                  <% if product.stock_quantity == 0 %>
-                    <span class="badge bg-secondary">Out of Stock</span>
-                  <% end %>
-                </div>
+                <%# Out of Stock Badge %>
+                <% if product.stock_quantity == 0 %>
+                  <span class="badge bg-secondary mt-2">Out of Stock</span>
+                <% end %>
 
-                <%# Display product tags if available %>
+                <%# Product Tags %>
                 <div class="mt-2">
                   <% if product.tags.any? %>
                     <p>Tags:</p>
@@ -91,7 +101,6 @@
         <% end %>
       </div>
 
-      <%# Pagination links for navigating through products %>
       <div class="d-flex justify-content-start">
         <%= paginate @products, theme: 'bootstrap-4' %>
       </div>
