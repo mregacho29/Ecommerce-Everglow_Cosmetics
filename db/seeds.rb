@@ -136,6 +136,8 @@
 # puts "Products created for each category!"
 
 
+
+# Create tax records
 Tax.create([
   { province: "Ontario", gst: 0.05, pst: 0.00, hst: 0.13 },
   { province: "Quebec", gst: 0.05, pst: 0.09975, hst: 0.00 },
@@ -151,3 +153,11 @@ Tax.create([
   { province: "Saskatchewan", gst: 0.05, pst: 0.06, hst: 0.00 },
   { province: "Yukon", gst: 0.05, pst: 0.00, hst: 0.00 }
 ])
+
+# Assign a default tax to existing orders
+default_tax = Tax.find_by(province: "Manitoba") # Replace with your default province
+if default_tax
+  Order.update_all(tax_id: default_tax.id)
+else
+  puts "Default tax record not found. Please check the Tax table."
+end
