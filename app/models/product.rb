@@ -2,6 +2,10 @@ class Product < ApplicationRecord
   belongs_to :category
   has_and_belongs_to_many :tags
 
+  has_many :favorites, dependent: :destroy
+  has_many :favorited_by_users, through: :favorites, source: :user
+
+
   has_one_attached :image # ActiveStorage attachment
   validates :name, presence: true
   validates :description, presence: true

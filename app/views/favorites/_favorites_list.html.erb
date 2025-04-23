@@ -1,0 +1,22 @@
+<div class="w-100" style="max-width: 800px;">
+  <h2 class="text-center text-success mb-4">Your Favorite Products</h2>
+
+  <% if favorites.any? %>
+    <div class="row">
+      <% favorites.each do |favorite| %>
+        <div class="col-md-6 mb-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <%= image_tag favorite.product.image_url || "placeholder.png", class: "card-img-top rounded", style: "height: 200px; object-fit: cover;" %>
+            <div class="card-body">
+              <h5 class="card-title text-truncate"><%= favorite.product.name %></h5>
+              <p class="card-text">Price: <%= number_to_currency(favorite.product.price) %></p>
+              <%= link_to "View Details", product_path(favorite.product), class: "btn btn-primary btn-sm" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-muted">You have no favorite products yet.</p>
+  <% end %>
+</div>

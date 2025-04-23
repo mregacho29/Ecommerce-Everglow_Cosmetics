@@ -1,0 +1,14 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100 bg-light">
+  <% if user_signed_in? %>
+    <%= render "favorites_list", favorites: @favorites %>
+  <% else %>
+    <div class="text-center">
+      <h1 class="text-danger mb-3">Loves</h1>
+      <p class="text-muted">
+        Please <%= link_to "sign in", "#", class: "text-decoration-underline text-primary", data: { bs_toggle: "modal", bs_target: "#signInModal" } %> to review this section.
+      </p>
+    </div>
+  <% end %>
+</div>
+
+<%= render "shared/modals/sign_in_modal" %>

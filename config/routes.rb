@@ -27,7 +27,6 @@ Rails.application.routes.draw do
 
     # Search and Favourites routes
     get "search", to: "products#search", as: :search
-    get "favourites", to: "favourites#index", as: :favourites
 
     # Products routes
     resources :products, only: [ :index, :show ] do
