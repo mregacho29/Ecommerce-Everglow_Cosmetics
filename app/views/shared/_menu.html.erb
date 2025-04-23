@@ -2,13 +2,18 @@
   <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 border-bottom">
     <!-- Left Side: Search Icon and Shipping & Language Button -->
     <div class="col-md-3 d-flex align-items-center">
+      <!-- Store Icon -->
+      <%= link_to stores_path, class: 'btn btn-outline-dark me-3' do %>
+        <i class="bi bi-shop"></i>
+      <% end %>
+
       <!-- Shipping & Language Button -->
       <button class="btn btn-outline-dark me-3" id="countrySelector" data-toggle="modal" data-target="#countryModal">
         <i class="bi bi-globe"></i>
       </button>
 
       <!-- Search Icon -->
-      <button class="btn btn-outline-dark ml-1" id="searchToggle">
+      <button class="btn btn-outline-dark me-3" id="searchToggle">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -19,12 +24,9 @@
         <img src="/assets/logo.png" alt="Everglow Cosmetics" class="me-2" style="height: 40px;">
       <% end %>
     </div>
+
     <!-- Right Side: Links and Icons -->
     <div class="col-md-3 text-end">
-      <!-- Store Icon -->
-      <%= link_to stores_path, class: 'btn btn-outline-dark me-2' do %>
-        <i class="bi bi-shop"></i>
-      <% end %>
 
       <!-- Cart Icon -->
       <%= link_to cart_path, class: 'btn btn-outline-dark me-2' do %>
@@ -34,6 +36,13 @@
       <!-- Favourite/Love Icon -->
       <%= link_to favorites_path, class: 'btn btn-outline-dark me-2' do %>
         <i class="bi bi-heart"></i>
+      <% end %>
+
+      <!-- Orders Icon -->
+      <% if user_signed_in? %>
+        <%= link_to orders_path, class: 'btn btn-outline-dark me-2' do %>
+          <i class="bi bi-receipt"></i> <%# Bootstrap receipt icon for orders %>
+        <% end %>
       <% end %>
 
       <!-- Sign In/Sign Up Dropdown -->
