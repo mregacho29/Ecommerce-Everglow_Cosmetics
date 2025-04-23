@@ -55,7 +55,6 @@ class CheckoutController < ApplicationController
     # Redirect to Stripe Checkout
     redirect_to stripe_session.url, allow_other_host: true
   end
-
   def success
     if session[:cart].present?
       if user_signed_in?
@@ -63,11 +62,15 @@ class CheckoutController < ApplicationController
         total_amount = calculate_cart_total
         tax = calculate_tax_for_user
 
+        # Fetch the user's province and associated tax record
+        user_province = current_user.address&.province
+        tax_record = Tax.find_by(province: user_province)
+
         # Save the order
         order = Order.create(
           user_id: current_user.id,
           total_amount: total_amount,
-          tax: tax,
+          tax_id: tax_record&.id, # Assign the tax record's ID
           status: "completed"
         )
 
@@ -115,7 +118,11 @@ class CheckoutController < ApplicationController
 
     # Fetch the province from the user's address
     user_province = current_user.address&.province # Use safe navigation to avoid nil errors
-    tax = Tax.find_by(province: user_province)
+    tax_record = Tax.find_by(province: user_province)
+    if tax_record.nil?
+      flash[:alert] = "Tax information is missing for your province. Please contact support."
+      redirect_to cart_path and return
+    end
 
     if tax
       gst = (total * tax.gst).round(2)

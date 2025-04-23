@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  belongs_to :tax, optional: true
   belongs_to :user
   has_one :payment
   has_many :order_items, dependent: :destroy
@@ -11,6 +12,13 @@ class Order < ApplicationRecord
   # Rename the method to avoid conflict
   def calculate_total_amount
     order_items.sum { |item| item.quantity * item.price }
+  end
+
+  # Calculate the total tax amount
+  def calculate_tax
+    return 0 unless tax # Return 0 if no tax is associated
+    tax_rate = tax.gst + tax.pst + tax.hst
+    total_amount * tax_rate
   end
 
   def self.ransackable_associations(auth_object = nil)

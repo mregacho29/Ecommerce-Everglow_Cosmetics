@@ -13,9 +13,10 @@
           <!-- Order Details -->
           <div class="row">
             <div class="col-md-6">
-              <p class="mb-1"><strong>Status:</strong> <%= order.status.capitalize %></p>              <p class="mb-1"><strong>Tax:</strong> $<%= order.tax %></p>
+              <p class="mb-1"><strong>Status:</strong> <%= order.status.capitalize %></p>
+              <p class="mb-1"><strong>Tax:</strong> $<%= order.tax %></p>
               <p class="mb-1"><strong>Total Amount:</strong> $<%= order.calculate_total_amount %></p>
-              <p class="mb-1"><strong>Grand Total:</strong> $<%= (order.total_amount + order.tax).round(2) %></p>
+              <p class="mb-1"><strong>Grand Total:</strong> $<%= (order.total_amount.to_f + order.calculate_tax.to_f).round(2) %></p>
             </div>
             <% if order.payment %>
               <div class="col-md-6">
