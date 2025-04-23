@@ -3,13 +3,18 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  resources :products, only: [:index, :show]
-  resources :categories, only: [:index, :show]
-  resources :orders, only: [:new, :create]
-  resources :cart, only: [:show]
-  resources :users, only: [:new, :create]
-  resources :sessions, only: [:new, :create, :destroy]
-  resources :addresses, only: [:new, :create]
+  resources :products, only: [ :index, :show ]
+  resources :categories, only: [ :index, :show ]
+  resources :orders, only: [ :new, :create, :show ]
+  resources :cart, only: [ :show ]
+  resources :users, only: [ :new, :create ]
+  resources :sessions, only: [ :new, :create, :destroy ]
+  resources :addresses, only: [ :new, :create ]
+  resources :payments, only: [] do
+    member do
+      put :confirm
+    end
+  end
 
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
