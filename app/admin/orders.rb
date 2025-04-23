@@ -1,4 +1,18 @@
 ActiveAdmin.register Order do
+  actions :all, except: [ :destroy ]
+
+  # Custom action to mark an order as shipped
+  member_action :mark_as_shipped, method: :put do
+    resource.update(status: :shipped)
+    redirect_to resource_path, notice: "Order ##{resource.id} has been marked as shipped."
+  end
+
+  # Add a button to mark an order as shipped on the show page
+  action_item :mark_as_shipped, only: :show, if: proc { resource.paid? } do
+    link_to "Mark as Shipped", mark_as_shipped_admin_order_path(resource), method: :put
+  end
+
+  # Index page configuration
   index do
     selectable_column
     id_column
@@ -12,20 +26,9 @@ ActiveAdmin.register Order do
         end
       end
     end
-    column "Tax" do |order|
-      number_to_currency(order.tax.to_f)
-    end
-    column "Total Amount" do |order|
-      number_to_currency(order.total_amount.to_f)
-    end
-    column "Grand Total" do |order|
-      number_to_currency((order.total_amount.to_f + order.tax.to_f).round(2))
-    end
-    column "Status" do |order|
-      order.status.capitalize
-    end
-    column "Order Date", :created_at
-    column "Last Updated", :updated_at
+    column :status
+    column :created_at
+    column :updated_at
     actions
   end
 end

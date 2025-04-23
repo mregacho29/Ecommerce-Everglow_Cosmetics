@@ -77,7 +77,7 @@ categories.each do |category_name|
     )
   end
 
-  # If there are fewer than 100 products in the API for this category, fill the rest with Faker
+# If there are fewer than 100 products in the API for this category, fill the rest with Faker
 # Fill the remaining products for the category
 if category_products.size < 100
   # Define custom product names for makeup and skincare categories
@@ -110,11 +110,11 @@ if category_products.size < 100
   # Determine the appropriate product list based on the category
   product_list = if category_name.downcase.include?("makeup")
                    makeup_products
-                 elsif category_name.downcase.include?("skincare")
+  elsif category_name.downcase.include?("skincare")
                    skincare_products
-                 else
+  else
                    makeup_products + skincare_products # Default to a mix of both
-                 end
+  end
 
   # Fetch images for the category
   search_term = category_name.downcase.include?("makeup") ? "makeup" : "skincare"
