@@ -6,15 +6,28 @@
       <% favorites.each do |favorite| %>
         <div class="col-md-6 mb-4">
           <div class="card h-100 border-0 shadow-sm">
+            <%# Product Image %>
             <%= image_tag favorite.product.image_url || "placeholder.png", class: "card-img-top rounded", style: "height: 200px; object-fit: cover;" %>
+
             <div class="card-body">
+              <%# Product Name and Price %>
               <h5 class="card-title text-truncate"><%= favorite.product.name %></h5>
               <p class="card-text">Price: <%= number_to_currency(favorite.product.price) %></p>
-              <%= link_to "View Details", product_path(favorite.product), class: "btn btn-primary btn-sm" %>
+
+              <%# Buttons for Viewing Details and Removing from Favorites %>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <%= link_to "View Details", product_path(favorite.product), class: "btn btn-primary btn-sm" %>
+                <%= button_to "Remove", remove_favorite_path(favorite), method: :delete, class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to remove this product from your favorites?" } %>
+              </div>
             </div>
           </div>
         </div>
       <% end %>
+    </div>
+
+    <%# Pagination %>
+    <div class="d-flex justify-content-center mt-4">
+      <%= paginate favorites, theme: 'bootstrap-4' %>
     </div>
   <% else %>
     <p class="text-center text-muted">You have no favorite products yet.</p>

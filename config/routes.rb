@@ -41,6 +41,11 @@ Rails.application.routes.draw do
     # Favorites routes
     post "favorites/add", to: "favorites#add", as: :favorite_add
     get "favorites", to: "favorites#index", as: :favorites
+    resources :favorites, only: [ :index ] do
+      member do
+        delete :remove, to: "favorites#remove", as: :remove
+      end
+    end
 
     # Organized Cart routes with shipping and checkout
     resources :carts, only: [ :show ] do

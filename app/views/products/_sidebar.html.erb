@@ -1,0 +1,16 @@
+<div class="col-md-3 mt-3">
+  <% if tags.present? %>
+    <h4><%= params[:category].present? ? params[:category].capitalize : "All Categories" %></h4>
+    <div class="invisible-tags">
+      <ul class="list-group">
+        <% tags.each do |tag| %>
+          <li class="list-group-item">
+            <%= link_to "#{tag.name} (#{tag.product_count})", products_path(tag: tag.name), class: "text-decoration-none" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <p>No tags available for this category.</p>
+  <% end %>
+</div>

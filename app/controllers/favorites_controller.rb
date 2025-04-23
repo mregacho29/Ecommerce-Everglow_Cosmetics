@@ -17,4 +17,12 @@ class FavoritesController < ApplicationController
   def index
     @favorites = user_signed_in? ? current_user.favorites.includes(:product) : []
   end
+
+
+  def remove
+    favorite = current_user.favorites.find(params[:id])
+    favorite.destroy
+    flash[:notice] = "Product has been removed from your favorites."
+    redirect_to favorites_path
+  end
 end
