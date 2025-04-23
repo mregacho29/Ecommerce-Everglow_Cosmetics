@@ -1,0 +1,8 @@
+<h1>Order Details</h1>
+<p><strong>Order ID:</strong> <%= @order.id %></p>
+<p><strong>Status:</strong> <%= @order.status.capitalize %></p>
+<p><strong>Total Amount:</strong> <%= number_to_currency(@order.total_amount) %></p>
+
+<% if @order.new? %>
+  <%= button_to "Confirm Payment", confirm_payment_path(@order), method: :put, class: "btn btn-primary" %>
+<% end %>

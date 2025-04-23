@@ -5,14 +5,18 @@ Rails.application.routes.draw do
     get "favourites/index"
     get "carts/show"
 
-    # Static pages
-    get "contact", to: "pages#show", defaults: { slug: "contact" }, as: :contact
-    get "about", to: "pages#show", defaults: { slug: "about" }, as: :about
-    get "stores", to: "pages#stores", as: :stores
-    get "services", to: "pages#services", as: :services
-    get "cart", to: "carts#show", as: :cart
-    get "search", to: "products#search", as: :search
-    get "favourites", to: "favourites#index", as: :favourites
+  resources :products, only: [ :index, :show ]
+  resources :categories, only: [ :index, :show ]
+  resources :orders, only: [ :new, :create, :show ]
+  resources :cart, only: [ :show ]
+  resources :users, only: [ :new, :create ]
+  resources :sessions, only: [ :new, :create, :destroy ]
+  resources :addresses, only: [ :new, :create ]
+  resources :payments, only: [] do
+    member do
+      put :confirm
+    end
+  end
 
     # Products routes
     resources :products, only: [ :index, :show ] do
