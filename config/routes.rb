@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "home/index"
   get "orders/index"
   get "orders/show"
   # Category routes
