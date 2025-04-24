@@ -68,6 +68,10 @@ Rails.application.routes.draw do
       resources :orders, only: [ :index, :show ] # For admins
     end
 
+    # Home routes
+    resources :announcements, only: [ :index, :show ]
+
+
     # Devise routes for users
     devise_for :users
 
@@ -79,6 +83,6 @@ Rails.application.routes.draw do
     get "up" => "rails/health#show", as: :rails_health_check
 
     # Root route
-    root "products#index"
+    root "home#index"
   end
 end
