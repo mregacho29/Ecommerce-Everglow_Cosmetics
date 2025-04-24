@@ -1,6 +1,7 @@
 //= require rails-ujs
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Search bar toggle functionality
   const searchToggle = document.getElementById('searchToggle');
   const searchBarRow = document.getElementById('searchBarRow');
   const searchClose = document.getElementById('searchClose');
@@ -21,4 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 300); // Match the CSS transition duration
     });
   }
+
+  // Scroll left functionality
+  window.scrollLeft = function (containerId) {
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  // Scroll right functionality
+  window.scrollRight = function (containerId) {
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
 });

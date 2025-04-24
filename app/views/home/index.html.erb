@@ -1,28 +1,31 @@
-<div id="announcementsCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+<div id="announcementsCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
   <!-- Carousel Indicators -->
   <div class="carousel-indicators">
-    <% @announcements.each_slice(4).with_index do |_, index| %>
-      <button type="button" data-bs-target="#announcementsCarousel" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>" aria-current="<%= 'true' if index == 0 %>" aria-label="Slide <%= index + 1 %>"></button>
+    <% @announcements.each_slice(3).with_index do |_, index| %>
+      <button type="button" data-bs-target="#announcementsCarousel" data-bs-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>" aria-label="Slide <%= index + 1 %>" aria-current="<%= 'true' if index == 0 %>"></button>
     <% end %>
   </div>
 
   <!-- Carousel Inner -->
-  <div class="carousel-inner">
-    <% @announcements.each_slice(4).with_index do |group, index| %>
+  <div class="carousel-inner mt-4">
+    <% @announcements.each_slice(3).with_index do |group, index| %>
       <div class="carousel-item <%= 'active' if index == 0 %>">
-        <div class="container">
-          <div class="row">
-            <% group.each do |announcement| %>
-              <div class="col-md-3">
-                <div class="card">
-                  <%= image_tag url_for(announcement.image), class: "card-img-top", alt: "Announcement Image" if announcement.image.attached? %>
-                  <div class="card-body text-center">
-                    <h5 class="card-title"><%= announcement.title %></h5>
-                  </div>
+        <div class="row">
+          <% group.each do |announcement| %>
+            <div class="col-md-4">
+              <div class="card mx-auto" style="background-color: #f8f9fa; border: 1px solid #ddd;">
+                <%# Display the announcement image %>
+                <%= image_tag url_for(announcement.image), class: "card-img-top", alt: "Announcement Image" if announcement.image.attached? %>
+                <div class="card-body text-center">
+                  <%# Display the announcement title %>
+                  <h5 class="card-title"><%= announcement.title %></h5>
+
+                  <%# Display the announcement description below the title %>
+                  <p class="card-text opacity-75"><%= announcement.description || "No description available." %></p>
                 </div>
               </div>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         </div>
       </div>
     <% end %>
@@ -34,6 +37,96 @@
     <span class="visually-hidden">Previous</span>
   </button>
   <button class="carousel-control-next" type="button" data-bs-target="#announcementsCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<!-- Top Pick Section -->
+<h2 class="text-left my-4">Top Pick</h2>
+<div id="topPickCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <% @top_picks.limit(50).each_slice(4).with_index do |group, index| %>
+      <div class="carousel-item <%= index == 0 ? 'active' : '' %>">
+        <div class="row g-2 justify-content-center">
+          <% group.each do |product| %>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="card h-100" style="background-color: #f8f9fa; border: 1px solid #ddd;">
+                <div class="image-container" style="height: 200px; overflow: hidden;">
+                  <% if product.image_url.present? %>
+                    <%= image_tag product.image_url, class: "img-fluid h-100 w-100 object-fit-cover rounded-top", alt: product.name %>
+                  <% elsif product.image.attached? %>
+                    <%= image_tag product.image, class: "img-fluid h-100 w-100 object-fit-cover rounded-top", alt: product.name %>
+                  <% else %>
+                    <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white">
+                      <p class="m-0">No image available</p>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="card-body text-center">
+                  <%# Make the product title clickable %>
+                  <h5 class="card-title">
+                    <%= link_to product.name, product_path(product), class: "text-decoration-none text-dark" %>
+                  </h5>
+                  <p class="card-text"><%= number_to_currency(product.price) %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#topPickCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#topPickCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<!-- Sales Section -->
+<h2 class="text-left my-4">Sales</h2>
+<div id="salesCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <% @sales.limit(50).each_slice(4).with_index do |group, index| %>
+      <div class="carousel-item <%= index == 0 ? 'active' : '' %>">
+        <div class="row g-2 justify-content-center">
+          <% group.each do |product| %>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="card h-100" style="background-color: #f8f9fa; border: 1px solid #ddd;">
+                <div class="image-container" style="height: 200px; overflow: hidden;">
+                  <% if product.image_url.present? %>
+                    <%= image_tag product.image_url, class: "img-fluid h-100 w-100 object-fit-cover rounded-top", alt: product.name %>
+                  <% elsif product.image.attached? %>
+                    <%= image_tag product.image, class: "img-fluid h-100 w-100 object-fit-cover rounded-top", alt: product.name %>
+                  <% else %>
+                    <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white">
+                      <p class="m-0">No image available</p>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="card-body text-center">
+                  <%# Make the product title clickable %>
+                  <h5 class="card-title">
+                    <%= link_to product.name, product_path(product), class: "text-decoration-none text-dark" %>
+                  </h5>
+                  <p class="card-text"><%= number_to_currency(product.price) %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#salesCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#salesCarousel" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>

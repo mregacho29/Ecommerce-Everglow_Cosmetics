@@ -1,0 +1,76 @@
+/*
+ *= require_self
+ *= require custom
+ */
+
+// Center alignment and animation for the search bar
+.search-bar-container {
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(-20px);
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.card-img-top {
+  object-fit: cover;
+  height: 200px;
+  width: 100%;
+}
+
+
+.horizontal-scroll-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .scroll-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.scroll-left {
+      left: 0;
+    }
+
+    &.scroll-right {
+      right: 0;
+    }
+
+    span {
+      font-size: 2rem;
+    }
+  }
+
+  .horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 1rem 0;
+
+    .card {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+
+.card-img-top {
+  object-fit: cover; /* Ensures the image fills the container while maintaining aspect ratio */
+  height: 200px; /* Set a fixed height for the images */
+  width: 100%; /* Make the image fill the width of the card */
+  border-radius: 0.5rem; /* Optional: Add rounded corners */
+}

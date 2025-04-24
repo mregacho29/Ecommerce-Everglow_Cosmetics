@@ -3,10 +3,14 @@ ActiveAdmin.register Announcement do
   permit_params :title, :image
 
   # Form for creating/editing announcements
+
+  remove_filter :image_attachment, :image_blob
+
   form do |f|
-    f.inputs "Announcement Details" do
-      f.input :title
-      f.input :image, as: :file # File upload field for Active Storage
+    f.semantic_errors
+    f.inputs
+    f.inputs do
+      f.input :image, as: :file
     end
     f.actions
   end

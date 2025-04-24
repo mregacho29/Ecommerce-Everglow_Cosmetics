@@ -482,7 +482,7 @@ DEPENDENCIES
   rails (~> 8.0.1)
   rubocop
   rubocop-rails-omakase
-  sass-rails
+  sass-rails (~> 6.0)
   selenium-webdriver
   solid_cable
   solid_cache

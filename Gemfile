@@ -23,7 +23,7 @@ gem "jbuilder"
 gem "activeadmin"
 gem "devise"
 gem "cancancan"
-gem "sass-rails"
+gem 'sass-rails', '~> 6.0'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'faker'
 gem 'pexels'
